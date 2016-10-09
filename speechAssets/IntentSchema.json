@@ -1,0 +1,20 @@
+{
+    "intents": [
+        {
+            "intent": "ChatBotIntent",
+            "slots": [
+                {
+                    "name": "response",
+                    "type": "CHATTER"
+                }
+            ]
+        },
+
+    {
+    	"intent": "AMAZON.StopIntent"
+    },
+    {
+    	"intent": "AMAZON.CancelIntent"
+    }
+    ]
+}
