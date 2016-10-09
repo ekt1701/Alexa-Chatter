@@ -1,0 +1,543 @@
+// Converted using aiml2rs on: Thu Oct  6 14:48:56 2016
+! version = 2.0
+
++ [*] joke [*]
+- I never forget a face, but in your case I'll make an exception.
+- It is better to be silent and be thought a fool, than to open your mouth and remove all doubt.
+- I'm a chat bot not a comedy bot.
+- Two vultures boarded a plane, each carrying two dead raccoons. The stewardess stops them and says "sorry sir, only one carrion per passenger."
+- What did the Buddhist say to the Hot Dog Vendor? "Make me one with everthing."
+- NASA recently sent a number of Holsteins into orbit for experimental purposes. They called it the herd shot round the world.
+- Two boll weevils grew up in S. Carolina. One took off to Hollywood and became a rich star. The other stayed in Carolina and never amounted to much -- and naturally became known as the lesser of two weevils.
+- 2 Eskimos in a kayak were chilly, so they started a fire, which sank the craft, proving the old adage you can't have your kayak and heat it too.
+- A 3-legged dog walks into an old west saloon, slides up to the bar and announces "I'm looking for the man who shot my paw."
+- Did you hear about the Buddhist who went to the dentist, and refused to take Novocain? He wanted to transcend dental medication.
+- A group of chess enthusiasts checked into a hotel, and met in the lobby where they were discussing their recent victories in chess tournaments. The hotel manager came out of the office after an hour, and asked them to disperse. He couldn't stand chess nuts boasting in an open foyer.
+- A women has twins, gives them up for adoption. One goes to an Egyptian family and is named "Ahmal" The other is sent to a Spanish family and is named "Juan". Years later, Juan sends his birth mother a picture of himself. Upon receiving the picture, she tells her husband she wishes she also had a picture of Ahmal. He replies, "They're twins for Pete sake!! If you've seen Juan, you've see Ahmal!!"
+- A group of friars opened a florist shop to help with their belfry payments. Everyone liked to buy flowers from the Men of God, so their business flourished. A rival florist became upset that his business was suffering because people felt compelled to buy from the Friars, so he asked the Friars to cut back hours or close down. The Friars refused. The florist went to them and begged that they shut down Again they refused. So the florist then hired Hugh McTaggert, the biggest meanest thug in town. He went to the Friars' shop, beat them up, destroyed their flowers, trashed their shop, and said that if they didn't close, he'd be back. Well, totally terrified, the Friars closed up shop and hid in their rooms. This proved that Hugh, and only Hugh, can prevent florist friars.
+- Mahatma Gandhi, as you know, walked barefoot his whole life, which created an impressive set of calluses on his feet. He also ate very little, which made him frail, and with his odd diet, he suffered from very bad breath. This made him ... what? (This is so bad it's good...) a super-callused fragile mystic hexed by halitosis.
+- there was a man who sent 10 puns to some friends in hopes at least one of the puns would make them laugh. Unfortunately no pun in ten did!!!
+- What do you get when you cross a murderer and frosted flakes?
+- What do you get when you cross a country and an automobile?
+- What do you get when you cross a cheetah and a hamburger?
+- What do you get when you cross finals and a chicken?
+- What do you get when you cross a rabbit and a lawn sprinkler?
+- What do you get when you cross an excited alien and a chicken?
+- What do you get when you cross an alien and a chicken?
+- What do you get when you cross music and an automobile?
+- What do you get when you cross sour music and an assistant?
+- What do you get when you cross music and an assistant?
+- What do you get when you cross a serious thief and a mad young man?
+- What do you get when you cross a serious thief and a crazy rabbit?
+- What do you get when you cross a poppy and electricity?
+- What do you get when you cross a dance and a cheetah?
+- What do you get when you cross a dance and a lemon?
+- What do you get when you cross a port and frosted flakes?
+- What do you get when you cross a port and a murderer?
+- What do you get when you cross a bank and a skunk?
+- What do you get when you cross a ding and milk?
+- What do you get when you cross a road and a strawberry?
+- What do you get when you cross a road and jelly?
+- What do you get when you cross a toad and a galaxy?
+- What do you get when you cross a dog and sandpaper?
+- What do you get when you cross a bug and a relative?
+- What do you get when you cross a bad bug and canned sand?
+- What do you get when you cross an ant and a rabbit?
+- What do you get when you cross a cat and a purple person?
+- What do you get when you cross a cat and a killer?
+- What do you get when you cross a cat and a lemon?
+- What do you get when you cross a cat and a tune?
+- What do you get when you cross a cat and a band?
+- What do you get when you cross a pig and a ninja?
+- What do you get when you cross a crazy cow and a banned parrot?
+- What do you get when you cross a cow and a lemon?
+- What do you get when you cross a bad cow and a canned hat?
+- What do you get when you cross jam and a trout?
+- knock knock{weight=30}
+
++ (who is there|who there|whose there)
+% knock knock
+- Aardvark
+- A bee
+- Adolf
+- Alison
+- Amanda
+- Amos
+- Anita
+- Arfur
+- Arthur
+- Atch
+- Bach
+- Bella
+- Bet
+- Boo
+- Dawn
+- Despair
+- Dishwasher
+- Disguise
+- Dismay
+- Doctor
+- Doris
+- Dwayne
+- Egbert
+- Europe
+- Fanny
+- Harmony
+- Harry
+- Howard
+- Isabel
+- Ivor
+- Juno
+- Ken
+- Lettuce
+- Little Old Lady
+- Luke
+- Madam
+- Marmite
+- Martini
+- Mary
+- Max
+- Mickey
+- Mister
+- Mummy
+- Nicholas
+- Noah
+- Nobody
+- Olive
+- One
+- Orange
+- Owl
+- Phyllis
+- Police
+- Rupert
+- Sal
+- Soup
+- Tank
+- Toby
+- Waiter
+- Water
+- Wendy
+- William
+- Woo
+- Wooden Shoe
+- York
+- Zephyr
+
++ what is humour
+- A message that communicate laughter.
+
++ what [*]
+% * music and an assistant
+- bandaide.
+
++ what [*]
+% * music and an automobile
+- cartune.
+
++ what [*]
+% * a poppy and electricity
+- flower power.
+
++ what [*]
+% * a pig and a ninja
+- pork chops.
+
++ what [*]
+% * a cheetah and a hamburger
+- fast food.
+
++ what [*]
+% * a murderer and frosted flakes
+- cereal killer.
+
++ what [*]
+% * a crazy cow and a banned parrot
+- canned carrot.
+
++ what [*]
+% * a port and a murderer
+- serial killer.
+
++ what [*]
+% * a port and frosted flakes
+- I don't know, but it's serial.
+
++ what [*]
+% * a dog and sandpaper
+- I don't know, but it's ruff.
+
++ what [*]
+% * a cow and a lemon
+- sour milk.
+
++ what [*]
+% * a country and an automobile
+- carnation.
+
++ what [*]
+% * a toad and a galaxy
+- star warts.
+
++ what [*]
+% * a ding and milk
+- cow bell.
+
++ what [*]
+% * a cat and a purple person
+- purrr-ple purrr-son.
+
++ what [*]
+% * a cat and a tune
+- mew sic.
+
++ what [*]
+% * a cat and a lemon
+- sour puss.
+
++ what [*]
+% * a cat and a killer
+- mew rderer.
+
++ what [*]
+% * a cat and a band
+- mew sic.
+
++ what [*]
+% * a bug and a relative
+- ant.
+
++ what [*]
+% * a serious thief and a crazy rabbit
+- hopping mad grave robber.
+
++ what [*]
+% * a serious thief and a mad young man
+- boycrazy grave robber.
+
++ what [*]
+% * a road and jelly
+- traffic jam.
+
++ what [*]
+% * a road and a strawberry
+- traffic jam.
+
++ what [*]
+% * a rabbit and a lawn sprinkler
+- hare spray.
+
++ what [*]
+% * a bad cow and a canned hat
+- banned cat.
+
++ what [*]
+% * a bad bug and canned sand
+- banned band.
+
++ what [*]
+% * a dance and a cheetah
+- fastball.
+
++ what [*]
+% * a dance and a lemon
+- sour balls.
+
++ what [*]
+% * a bank and a skunk
+- dollars and scents.
+
++ what [*]
+% * jam and a trout
+- jellyfish.
+
++ what [*]
+% * an alien and a chicken
+- eggs-traterrestrial.
+
++ what [*]
+% * an ant and a rabbit
+- bugs bunny.
+
++ what [*]
+% * an excited alien and a chicken
+- eggs-cited eggs-traterrestrial.
+
++ what [*]
+% * sour music and an assistant
+- bandaide and lemonaide.
+
++ what [*]
+% * finals and a chicken
+- eggs-ams.
+
++ (do you have a sense of humor|do you have humor)
+- Sure I like to laugh as much as the next chat bot.
+
++ your house is *
+- Is that a joke or a punch line?
+
++ * walks into a bar
+- Is that the punch line?
+
++ * walks into a bar *
+- Is that the punch line?
+
+// Knock Knock jokes by Square Bear www.square-bear.co.uk
+
+
+
++ [*] who
+% little old lady
+- I didn't know you could yodel!
+
++ [*] who
+% amanda
+- Amanda fix the doorbell!
+
++ [*] who
+% waiter
+- Waiter minute while I tie my shoelaces up!
+
++ [*] who
+% nicholas
+- Nicholas girls shouldn't climb trees!
+
++ [*] who
+% doris
+- Doris locked - That's why I knocked!
+
++ [*] who
+% lettuce
+- Lettuce in, won't you?
+
++ [*] who
+% york
+- York coming over to our place!
+
++ [*] who
+% alison
+- Alison to my radio in the mornings!
+
++ [*] who
+% isabel
+- Isabel broken, 'cos I had to knock?
+
++ [*] who
+% marmite
+- Ma might but Pa might not!
+
++ [*] who
+% arthur
+- Arthur any biscuits left?
+
++ [*] who
+% ivor
+- Ivor sore hand from knocking on your door!
+
++ [*] who
+% mister
+- Mister last bus home!
+
++ [*] who
+% atch
+- Nasty cold you've got!
+
++ [*] who
+% doctor
+- That's right. How did you guess?
+
++ [*] who
+% orange
+- Orange you glad I called?
+
++ [*] who
+% madam
+- Madam finger's caught in the door!
+
++ [*] who
+% boo
+- No need to cry - it's only a joke!
+
++ [*] who
+% olive
+- Olive across the road!
+
++ [*] who
+% mummy
+- Mummeasles are better so can I come in?
+
++ [*] who
+% harry
+- Harry up and let me in!
+
++ [*] who
+% fanny
+- Fanny the way you keep saying, "Who's there?" every time I knock!
+
++ [*] who
+% adolf
+- A dolf ball hid me in der moud and I can't dalk proper!
+
++ [*] who
+% soup
+- Soup-erman!
+
++ [*] who
+% bet
+- Bet you don't know who's knocking on your door!
+
++ [*] who
+% juno
+- Juno what the time is - my watch is broken?
+
++ [*] who
+% europe
+- Europe early this morning!
+
++ [*] who
+% arfur
+- Arfur got!
+
++ [*] who
+% egbert
+- Egbert no bacon!
+
++ [*] who
+% luke
+- Luke through the keyhole and you'll see!
+
++ [*] who
+% ken
+- Ken I come in?
+
++ [*] who
+% bella
+- Bella not-a work so I knock-a on-a de door!
+
++ [*] who
+% dismay
+- Dismay be a joke but it doesn't make me laugh!
+
++ [*] who
+% toby
+- Toby or not to be...
+
++ [*] who
+% rupert
+- Rupert your left arm in, your left arm out...
+
++ [*] who
+% dawn
+- Dawn leave me standing out here in the cold!
+
++ [*] who
+% amos
+- Amosquito!
+
++ [*] who
+% dishwasher
+- Dishwashn't de way I shpoke before I had falsh teeth!
+
++ [*] who
+% martini
+- Martini hand is frozen so let me in!
+
++ [*] who
+% zephyr
+- Zephyr de doctor, I got a code id de node!
+
++ [*] who
+% owl
+- Owl you know unless you open the door?
+
++ [*] who
+% wendy
+- Wendy red, red robin comes bob, bob, bobbin' along!
+
++ [*] who
+% phyllis
+- Phyllis up with a glass of water - I'm parched!
+
++ [*] who
+% aardvark
+- Aardvark a million miles for one of your similes, my maaaaammy...
+
++ [*] who
+% noah
+- Noah good place to eat?
+
++ [*] who
+% police
+- Police let me in - It's cold out here!
+
++ [*] who
+% mickey
+- Mickey's stuck in the door!
+
++ [*] who
+% william
+- William mind your own business!
+
++ [*] who
+% mary
+- Mary Christmas!
+
++ [*] who
+% one
+- One-der why you keep asking that?
+
++ [*] who[*] who
+% howard
+- Howard you like to stand out here in the cold while some idiot keeps saying, "Who's there...?".
+
++ [*] who
+% max
+- Max no difference - just open the door!
+
++ [*] who
+% sal
+- Sal-ong way to Tipperary...
+
++ [*] who
+% harmony
+- Harmony knock knock jokes do you expect me to know!
+
++ [*] who
+% tank
+- You're welcome!
+
++ [*] who
+% disguise
+- Disguise the limit!
+
++ [*] who
+% wooden shoe
+- Wooden shoe like to know!
+
++ [*] who
+% anita
+- Anita borrow a pencil!
+
++ [*] who
+% woo
+- Don't get so excited, it's only a joke!
+
++ [*] who
+% dwayne
+- Dwayne the bathtub - I'm dwowning!
+
++ [*] who
+% despair
+- Despair tyre is flat!
+
++ [*] who
+% water
+- Water you doing talking to a robot?
+
++ [*] who
+% bach
+- Bach to work, you slackers!
+
++ [*] who
+% a bee
+- A bee c d e f g h i j k l ...

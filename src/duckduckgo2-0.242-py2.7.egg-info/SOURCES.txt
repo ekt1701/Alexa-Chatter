@@ -1,0 +1,11 @@
+LICENSE
+MANIFEST
+README.rst
+duckduckgo.py
+setup.cfg
+setup.py
+duckduckgo2.egg-info/PKG-INFO
+duckduckgo2.egg-info/SOURCES.txt
+duckduckgo2.egg-info/dependency_links.txt
+duckduckgo2.egg-info/entry_points.txt
+duckduckgo2.egg-info/top_level.txt

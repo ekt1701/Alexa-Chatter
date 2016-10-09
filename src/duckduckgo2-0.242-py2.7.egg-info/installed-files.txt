@@ -1,0 +1,10 @@
+..\duckduckgo.py
+..\duckduckgo.pyc
+dependency_links.txt
+entry_points.txt
+PKG-INFO
+SOURCES.txt
+top_level.txt
+..\..\..\bin\ddg-script.py
+..\..\..\bin\ddg.exe
+..\..\..\bin\ddg.exe.manifest

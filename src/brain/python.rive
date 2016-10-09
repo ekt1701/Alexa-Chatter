@@ -1,0 +1,119 @@
+// Example of a Python object macro.
+
+! version = 2.0
+
+
+> object quote python
+    import urllib2
+    import json
+    import random
+    randomwords = ['positive', 'funny', 'inspiration', 'nature', 'courage', 'laugh', 'tech', 'exercise', 'health', 'fitness', 'laughter', 'silly', 'sunny', 'happy', 'cheerful', 'animals', 'friendship', 'success', 'patience', 'love', 'peace']
+    randomstring = str(randomwords[random.randint(0,20)])
+    url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=1&q=https://www.quotesdaddy.com/feed/tagged/"+randomstring
+    response = urllib2.urlopen(url)
+    data = dict(json.loads(response.read()))
+    RandomQuote = data['responseData']['feed']['entries']
+    titles = []
+    for site in RandomQuote:
+        titles.append(site['title'])
+
+    quoterandom = '. '.join(titles)
+    randomquoteReport = "Here is a quote for you. " + quoterandom
+    return randomquoteReport
+< object
+
+> object duckDuck python
+    import duckduckgo
+    import re
+    query = args[0]
+    try:
+      answer=duckduckgo.get_zci(query,safesearch=False)
+    except:
+      return "I am having trouble searching it, try something else."
+    answer=answer.split('(')[0]
+
+    if("..." in answer):
+        answer = answer + "wait! Are you testing me?!?!"
+    if('http' in answer):
+        answer = "Sorry all I could get was a link for your request"
+    else:
+        answer = "Here is the answer " + answer
+    return answer
+< object
+
+> object todo python
+    import urllib2
+    import csv
+    url = 'https://raw.githubusercontent.com/ekt1701/Alexa-Good-Morning/master/todo.csv'
+    response = urllib2.urlopen(url)
+    cr = csv.reader(response)
+    for todayrow in cr:
+        todo = str(todayrow)
+    return todo
+< object
+
+> object weather python
+    import urllib2
+    import json
+    url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D12795652&format=json"
+    response = urllib2.urlopen(url)
+    data = dict(json.loads(response.read()))
+    title = data['query']['results']['channel']['item']['title']
+    temp = data['query']['results']['channel']['item']['condition']['temp']
+    status = data['query']['results']['channel']['item']['condition']['text']
+    humidity = data['query']['results']['channel']['atmosphere']['humidity']
+    temppressure = data['query']['results']['channel']['atmosphere']['pressure']
+    rising = data['query']['results']['channel']['atmosphere']['rising']
+    dp =float(temppressure)
+    pressure = str(round((dp*0.0295301),2))
+    if rising == 1:
+        rising = "Rising"
+    elif rising == 2:
+        rising = "Falling"
+    else:
+        rising = "Steady"
+    wind = data['query']['results']['channel']['wind']['speed']
+    winddirection = data['query']['results']['channel']['wind']['direction']
+    dw = int(winddirection)
+    directionnumber = round(((dw-11.25)/22.5),0)
+    convertnumber=['North','North northeast','Northeast','East northeast','East','East southeast','Southeast','South southeast','South','South southwest','Southwest','West southwest','West','West northwest','Northwest','North northwest']
+    dn = int(directionnumber)
+    directionstring = str(convertnumber[dn])
+    forecast = data['query']['results']['channel']['item']['forecast']
+    day0all = forecast[0]
+    day0data = ". Today it will be " + day0all['text'] + " and " + day0all['high'] + " degrees. "
+    currentReport = title + ". It is " + status + ". The temperature is " + temp + " degrees. Wind Speed is " + wind + " miles per hour, the direction is " + directionstring + ". The humidity is " + humidity + " percent. " + " The pressure is " + pressure + " millibars and is " + rising + day0data
+    return currentReport
+< object
+
+> object cnnNew python
+    import urllib2
+    import json
+    url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://rss.cnn.com/rss/cnn_topstories.rss"
+    response = urllib2.urlopen(url)
+    data = dict(json.loads(response.read()))
+    newsreports = data['responseData']['feed']['entries']
+
+    titles = []
+    for site in newsreports:
+        titles.append(site['title'])
+
+    newsreport = '. '.join(titles)
+    newsReport = "Here are the top stories from CNN. " + newsreport
+    return newsReport
+< object
+
++ [*] to do [*]
+- Here is what you need to do: <call>todo</call>
+
++ [*] my weather [*]
+- <call>weather</call>
+
++ [*] random quote [*]
+- <call>quote</call>
+
++ [*] headline news [*]
+- <call>cnnNew</call>
+
++ search for *
+- <call>duckDuck <star1></call>
