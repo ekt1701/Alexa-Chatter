@@ -17,3 +17,7 @@ Zip the contents of the src folder and upload to AWS Lambda.
 The configuration is Runtime: Python 2.7, Handler: index.lambda_handler, Existing Role: lambda_basic_execution. In the Advanced settings, set the timeout to 20 seconds.
 
 In the Amazon Developer Console, use the files from the speechAssets folder and make a custom slot named CHATTER and fill the slots with random words and phrases.
+
+The woeid for the Yahoo Weather API, is set to my location, so you will need to change it for your location. You can find your woeid here: http://woeid.rosselliot.co.nz/
+
+For the todo list you will need to host the csv file somewhere. Personally, I saved the csv files to DropBox, which can easily be edited with a text editor. (Note when you get the link from DropBox change ?dl=0 to ?raw=1)  The sample to do links to https://github.com/ekt1701/Alexa-Good-Morning/blob/master/todo.csv
