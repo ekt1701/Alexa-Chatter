@@ -25,7 +25,7 @@
 > object duckDuck python
     import duckduckgo
     import re
-    query = args[0]
+    query = " ".join(args)
     try:
       answer=duckduckgo.get_zci(query,safesearch=False)
     except:
