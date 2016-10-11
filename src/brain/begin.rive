@@ -7,7 +7,6 @@
 
 // The Botmaster's Name
 ! var master = localuser
-! var myname = Ed
 
 // Bot Variables
 ! var name     = Chatter
