@@ -1,0 +1,83 @@
+//Madlib game
+
++ [*] word game [*]
+- {topic=spy_madlib}{@next}
+- {topic=knight_madlib}{@next}
+- {topic=force_madlib}{@next}
+
+> topic force_madlib
+    + *
+    - lets start give me an adjective
+
+    + *
+    % lets start give me an adjective
+    - <set adjective1=<star>>give me a name
+
+    + *
+    % give me a name
+    - <set jedi_name=<star>>give me noun
+
+    + *
+    % give me noun
+    - <set noun1=<star>>give me another noun
+
+    + *
+    % give me another noun
+    - <set noun2=<star>>i need a verb
+
+    + *
+    % i need a verb
+    - <set verb=<star>>finally give me a plural noun
+
+    + *
+    % finally give me a plural noun
+    - <set pluralnoun=<star>>The Force is a mystical <get adjective1> power. As Jedi Master <get jedi_name> once said, the force is an energy <get noun1> created by all living <get pluralnoun>, that surrounds us, <get verb> us and binds the <get noun2> together.{topic=random}
+
+
+< topic
+
+> topic spy_madlib
+    + *
+    - lets start give me an adjective
+
+    + *
+    % lets start give me an adjective
+    - <set adjective1=<star>>i need another adjective
+
+    + *
+    % i need another adjective
+    - <set adjective2=<star>>give me noun
+
+    + *
+    % give me noun
+    - <set noun=<star>>give me a plural noun
+
+    + *
+    % give me a plural noun
+    - <set pluralnoun=<star>>Every <get adjective1> spy needs a pair of X-ray <get pluralnoun>, an invisible <get noun>, and a car with the most <get adjective2> features.{topic=random}
+< topic
+
+> topic knight_madlib
+    + *
+    - give me an adjective
+
+    + *
+    % give me an adjective
+    - <set adjective1=<star>>give me another adjective
+
+    + *
+    % give me another adjective
+    - <set adjective2=<star>>give me noun
+
+    + *
+    % give me noun
+    - <set noun=<star>>give me a plural noun
+
+    + *
+    % give me a plural noun
+    - <set pluralnoun=<star>>finally i need an adverb
+
+    + *
+    % finally i need an adverb
+    - <set adverb=<star>>The brave <get adjective1> knight rescued the <get adjective2> princess from a fire breathing <get noun>. Then the two <get pluralnoun> rode off into the sunset together and lived <get adverb> ever after.{topic=random}
+< topic
