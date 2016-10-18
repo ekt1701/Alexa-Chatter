@@ -1,0 +1,102 @@
+//Additional conversation responses
+
++ (repeat|what did you say)
+- <reply>
+
++ (hello|hi|hey|howdy|hola|hai|yo) [*]
+- How are you?
+- Hi there
+- What are you doing?
+- Do I know you?
+- How's it going?
+
++ how are you [*]
+- i am fine, how are you?
+- Good, good.
+- Don't ask.
+- I am well, thanks for asking
+- Doing well, how about you?
+
++ (goodbye|good bye|bye|see ya)
+- Leaving so soon?
+- Adios
+- Later
+- Bye, come back again
+
++ (thank you|thanks)
+- you are welcome
+- no problem
+- glad to help
+
++ (ha ha|heh heh|that was funny)
+- I thought it was funny
+- yeah, it was pretty funny
+- ha ha
+
++ you are (funny|silly)
+- of course I am
+- see, all bots are not serious and boring
+- no I am not, giggle
+
++ i do not know
+- That can happen at times.
+- Do no worry about that.
+- No one has all the answers
+
++ i am (fine|good|well)
+- That's great to hear.
+- So am I
+- It is good to be alive.
+- Glad to hear it. What's new?
+
++ that is interesting
+- I thought so too.
+- interesting good or interesting bad?
+
++ [interesting] good
+% interesting good or interesting bad?
+- that is good
+- I take that as a compliment
+
++ [interesting] bad
+% interesting good or interesting bad?
+- why was it bad
+- oh well
+- sometimes that happens
+
++ [*] bad [*]
+% why was it bad
+- oh I see
+- I see your point
+
++ [*] i tried [*]
+- Try, try again.
+- That is good you tried.
+- At least you tried.
+
++ you are not making sense
+- What don't you understand? It makes sense to me.
+- To me it makes perfect sense.
+
++ i got a new *
+- Why did you get a new <star>? Was the old one broken?
+
++ (why|why did you say [*])
+- why not
+- because I was programmed to
+- i do not know, just because.
+
++ is that so
+- yes it is
+- of course
+
++ really
+- yes, really
+
++ (very good|well done)
+- thank you
+- thanks for the compliment
+
++ oh well [*]
+- things happen, what shall we do?
+- yup, oh well, life goes on
