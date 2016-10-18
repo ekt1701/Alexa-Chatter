@@ -1,23 +1,5 @@
 // A generic set of chatting responses. This set mimicks the classic Eliza bot.
 
-+ *
-- I'm not sure I understand you fully.
-- Trying to determine if this is a person or a computer responding.
-- That is interesting. Please continue.
-- Tell me more about that.
-- What you said was either too complex or too simple for me.
-- Let us change the subject.
-- Not many people express themselves that way.
-- Is that your final answer?
-- My brain pattern set does not have a response for that.
-- I lost my train of thought.
-- Can we get back to business?
-- Try saying that with more or less context.
-- That is a very original thought.
-- What were we talking about again?
-- What do you really want to ask me?
-- My brain contains 987 categories, but not one that matches your last input.
-
 + (hello|hi|hey|howdy|hola|hai|yo) [*]
 - How are you?
 - Hi there
