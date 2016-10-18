@@ -1,119 +1,390 @@
-// Example of a Python object macro.
-
 ! version = 2.0
 
-
-> object quote python
-    import urllib2
-    import json
-    import random
-    randomwords = ['positive', 'funny', 'inspiration', 'nature', 'courage', 'laugh', 'tech', 'exercise', 'health', 'fitness', 'laughter', 'silly', 'sunny', 'happy', 'cheerful', 'animals', 'friendship', 'success', 'patience', 'love', 'peace']
-    randomstring = str(randomwords[random.randint(0,20)])
-    url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=1&q=https://www.quotesdaddy.com/feed/tagged/"+randomstring
-    response = urllib2.urlopen(url)
-    data = dict(json.loads(response.read()))
-    RandomQuote = data['responseData']['feed']['entries']
-    titles = []
-    for site in RandomQuote:
-        titles.append(site['title'])
-
-    quoterandom = '. '.join(titles)
-    randomquoteReport = "Here is a quote for you. " + quoterandom
-    return randomquoteReport
-< object
-
-> object duckDuck python
-    import duckduckgo
-    import re
-    query = " ".join(args)
-    try:
-      answer=duckduckgo.get_zci(query,safesearch=False)
-    except:
-      return "I am having trouble searching it, try something else."
-    answer=answer.split('(')[0]
-
-    if("..." in answer):
-        answer = answer + "wait! Are you testing me?!?!"
-    if('http' in answer):
-        answer = "Sorry all I could get was a link for your request"
-    else:
-        answer = "Here is the answer " + answer
-    return answer
-< object
-
-> object todo python
-    import urllib2
-    import csv
-    url = 'https://raw.githubusercontent.com/ekt1701/Alexa-Good-Morning/master/todo.csv'
-    response = urllib2.urlopen(url)
-    cr = csv.reader(response)
-    for todayrow in cr:
-        todo = str(todayrow)
-    return todo
-< object
-
-> object weather python
-    import urllib2
-    import json
-    url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D12795652&format=json"
-    response = urllib2.urlopen(url)
-    data = dict(json.loads(response.read()))
-    title = data['query']['results']['channel']['item']['title']
-    temp = data['query']['results']['channel']['item']['condition']['temp']
-    status = data['query']['results']['channel']['item']['condition']['text']
-    humidity = data['query']['results']['channel']['atmosphere']['humidity']
-    temppressure = data['query']['results']['channel']['atmosphere']['pressure']
-    rising = data['query']['results']['channel']['atmosphere']['rising']
-    dp =float(temppressure)
-    pressure = str(round((dp*0.0295301),2))
-    if rising == 1:
-        rising = "Rising"
-    elif rising == 2:
-        rising = "Falling"
-    else:
-        rising = "Steady"
-    wind = data['query']['results']['channel']['wind']['speed']
-    winddirection = data['query']['results']['channel']['wind']['direction']
-    dw = int(winddirection)
-    directionnumber = round(((dw-11.25)/22.5),0)
-    convertnumber=['North','North northeast','Northeast','East northeast','East','East southeast','Southeast','South southeast','South','South southwest','Southwest','West southwest','West','West northwest','Northwest','North northwest']
-    dn = int(directionnumber)
-    directionstring = str(convertnumber[dn])
-    forecast = data['query']['results']['channel']['item']['forecast']
-    day0all = forecast[0]
-    day0data = ". Today it will be " + day0all['text'] + " and " + day0all['high'] + " degrees. "
-    currentReport = title + ". It is " + status + ". The temperature is " + temp + " degrees. Wind Speed is " + wind + " miles per hour, the direction is " + directionstring + ". The humidity is " + humidity + " percent. " + " The pressure is " + pressure + " millibars and is " + rising + day0data
-    return currentReport
-< object
-
-> object cnnNew python
-    import urllib2
-    import json
-    url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://rss.cnn.com/rss/cnn_topstories.rss"
-    response = urllib2.urlopen(url)
-    data = dict(json.loads(response.read()))
-    newsreports = data['responseData']['feed']['entries']
-
-    titles = []
-    for site in newsreports:
-        titles.append(site['title'])
-
-    newsreport = '. '.join(titles)
-    newsReport = "Here are the top stories from CNN. " + newsreport
-    return newsReport
-< object
-
 + [*] to do [*]
-- Here is what you need to do: <call>todo</call>
+- Here is what you need to do: <call>resource toDo</call>
 
 + [*] my weather [*]
-- <call>weather</call>
+- <call>resource currentWeather</call> Now you are prepared for the weather.
+
++ [*] cat [fact|facts] [*]
+- <call>resource catFacts</call> Wasn't that interesting?
 
 + [*] random quote [*]
-- <call>quote</call>
+- <call>resource quoteRandom</call> I hope you liked that quote.
 
-+ [*] headline news [*]
-- <call>cnnNew</call>
++ [*] exchange rate [*]
+- <call>resource exchangeRate</call> Are you ready to spend some money?
+
++ [*] local news [*]
+- <call>resource myLA</call> So what do you want to talk about?
+
++ [*] (headline|national) news [*]
+- <call>resource cnnNews</call> Sometimes the news is depressing.
+
++ [*] science news [*]
+- <call>resource scienceNews</call> I'm always interested in science.
+
++ [*] space launch [*]
+- <call>resource spaceLaunch</call> That reminds me of the quote, Space the final frontier!
+
++ [*] people in space [*]
+- <call>resource spacePeople</call> Can you imagine living in space?
+
++ [*] when is (sunrise|sunset) [*] Where does the day go?
+- <call>resource sunRiseSet</call>
+
++ [*] define *
+- <call>resource definition <star></call>
+
++ [*] word of [the] day [*]
+- <call>resource wordDay</call> Did you know that word?
+
++ [*] you learned [*]
+- <call>resource reddit</call> I hope you learned something new.
 
 + search for *
-- <call>duckDuck <star1></call>
+- <call>resource duckDuck <star1></call>
+
++ [*] favorite [show|movie] [is|was] *
+- <call>resource omdb <star></call>
+
+> object resource python
+    import csv
+    import duckduckgo
+    import json
+    import random
+    import re
+    import requests
+    import urllib2
+    import datetime
+    import time
+    from xml.etree import ElementTree
+
+    command = " ".join(args)
+    parts = command.split(" ")
+
+    def avg(sequence):
+        return reduce(lambda x, y: x + y, sequence) / len(sequence)
+
+    def html2text(strText):
+        str1 = strText
+        int2 = str1.lower().find("<body")
+        if int2>0:
+           str1 = str1[int2:]
+        int2 = str1.lower().find("</body>")
+        if int2>0:
+           str1 = str1[:int2]
+        list1 = ['<br>',  '<tr',  '<td', '</p>', 'span>', 'li>', '</h', 'div>', '<em>', '</em>']
+        list2 = [chr(13), chr(13), chr(9), chr(13), chr(13),  chr(13), chr(13), chr(13), chr(13), chr(13)]
+        bolFlag1 = True
+        bolFlag2 = True
+        strReturn = ""
+        for int1 in range(len(str1)):
+          str2 = str1[int1]
+          for int2 in range(len(list1)):
+            if str1[int1:int1+len(list1[int2])].lower() == list1[int2]:
+               strReturn = strReturn + list2[int2]
+            if str1[int1:int1+7].lower() == '<script' or str1[int1:int1+9].lower() == '<noscript':
+               bolFlag1 = False
+            if str1[int1:int1+6].lower() == '<style':
+               bolFlag1 = False
+            if str1[int1:int1+7].lower() == '</style':
+               bolFlag1 = True
+            if str1[int1:int1+9].lower() == '</script>' or str1[int1:int1+11].lower() == '</noscript>':
+               bolFlag1 = True
+            if str2 == '<':
+               bolFlag2 = False
+            if bolFlag1 and bolFlag2 and (ord(str2) != 10) :
+              strReturn = strReturn + str2
+            if str2 == '>':
+               bolFlag2 = True
+            if bolFlag1 and bolFlag2:
+              strReturn = strReturn.replace(chr(32)+chr(13), chr(13))
+              strReturn = strReturn.replace(chr(9)+chr(13), chr(13))
+              strReturn = strReturn.replace(chr(13)+chr(32), chr(13))
+              strReturn = strReturn.replace(chr(13)+chr(9), chr(13))
+              strReturn = strReturn.replace(chr(13)+chr(13), chr(13))
+        strReturn = strReturn.replace(chr(13), chr(32))
+        return strReturn
+
+    def multiple_replace(dict, text):
+        regex = re.compile("(%s)" % "|".join(map(re.escape, dict.keys())))
+        return regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], text)
+
+    def catFacts():
+        url = "http://catfacts-api.appspot.com/api/facts?number=1"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        catfact = data['facts']
+        temp = str(catfact)
+        replace = {"'" : "\'","[u" : "","]" : ""}
+        webtext = multiple_replace(replace, temp)
+        catFacts = str(webtext)
+        return catFacts
+
+    def cnnNews(flag):
+        url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://rss.cnn.com/rss/cnn_topstories.rss"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        newsreports = data['responseData']['feed']['entries']
+        titles = []
+        for site in newsreports:
+            titles.append(site['title'])
+        print(flag)
+        if flag == "random":
+            response = titles[random.randint(0,8)]
+            response = response.replace("‘","").replace("’","").replace("`","")
+            cnnNews = "I saw on the news: " + response
+        else:
+            newsreport = ".<break time='1s'/>  ".join(titles)
+            cnnNews = "Here are the top stories from CNN. " + newsreport
+        return cnnNews
+
+    def currentWeather():
+        url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D12795652&format=json"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        title = data['query']['results']['channel']['item']['title']
+        temp = data['query']['results']['channel']['item']['condition']['temp']
+        status = data['query']['results']['channel']['item']['condition']['text']
+        humidity = data['query']['results']['channel']['atmosphere']['humidity']
+        temppressure = data['query']['results']['channel']['atmosphere']['pressure']
+        rising = data['query']['results']['channel']['atmosphere']['rising']
+        dp =float(temppressure)
+        pressure = str(round((dp*0.0295301),2))
+        if rising == 1:
+            rising = "Rising"
+        elif rising == 2:
+            rising = "Falling"
+        else:
+            rising = "Steady"
+        wind = data['query']['results']['channel']['wind']['speed']
+        winddirection = data['query']['results']['channel']['wind']['direction']
+        dw = int(winddirection)
+        directionnumber = round(((dw-11.25)/22.5),0)
+        convertnumber=['North','North northeast','Northeast','East northeast','East','East southeast','Southeast','South southeast','South','South southwest','Southwest','West southwest','West','West northwest','Northwest','North northwest']
+        dn = int(directionnumber)
+        directionstring = str(convertnumber[dn])
+        forecast = data['query']['results']['channel']['item']['forecast']
+        day0all = forecast[0]
+        day0data = ". Today it will be " + day0all['text'] + " and " + day0all['high'] + " degrees. "
+        currentWeather = title + ". It is " + status + ". The temperature is " + temp + " degrees. Wind Speed is " + wind + " miles per hour, the direction is " + directionstring + ". The humidity is " + humidity + " percent. " + " The pressure is " + pressure + " millibars and is " + rising + day0data
+        return currentWeather
+
+    def definition(query):
+        url = "http://chriscargile.com/dictionary/json/"+query
+        response = urllib2.urlopen(url)
+        try:
+            data = dict(json.loads(response.read()))
+            getData = data['instances'][0]['definition']
+            definition = "The definition for " + query + " is " + getData
+        except:
+            definition = "Sorry the word " + query + " was not found in dictionary"
+        return definition
+
+    def duckDuck(query):
+        try:
+          answer=duckduckgo.get_zci(query,safesearch=False)
+        except:
+          return "I am having trouble searching it, try something else."
+        answer=answer.split('(')[0]
+
+        if("..." in answer):
+            answer = answer + "wait! Are you testing me?!?!"
+        if('http' in answer):
+            answer = "Sorry all I could get was a link for your request"
+        else:
+            answer = "Here is the answer " + answer
+        return answer
+
+    def exchangeRate():
+        url = "http://api.fixer.io/latest?base=USD&symbols=JPY"
+        response = urllib2.urlopen(url)
+        rates = dict(json.loads(response.read()))
+        exchangeRate = rates["rates"]["JPY"]
+        exchangeRate = "Today 1 dollar equals " + str(exchangeRate) + " yen."
+        return exchangeRate
+
+    def myLA(flag):
+        url = "http://mynewsla.com/feed/"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
+        xml = urllib2.urlopen(req).read()
+        tree = ElementTree.fromstring(xml)
+        data=[]
+        for item in tree.findall('.//item'):
+            for title in item.findall('.//title'):
+                titleOutput = title.text
+            result = (titleOutput)
+            data.append(result)
+        if flag == "random":
+            response = data[random.randint(0,8)]
+            response = response.replace("‘","").replace("’","").replace("`","")
+            myLA = "I read about this in Los Angeles: " + response
+        else:
+            response = " <break time='1s'/> ".join(data)
+            response = response.replace("‘","").replace("’","").replace("`","")
+            myLA = "Here are your local news " + response
+        return myLA
+
+    def omdb(name):
+        name=name.replace(" ","%20")
+        url = "http://www.omdbapi.com/?t="+name+"&y=&plot=full&r=json"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        if data['Response'] == "True":
+            plot = data['Plot']
+            name=name.replace("%20"," ")
+            ombd = "I liked the story of " +name+ " " +plot
+        else:
+            name=name.replace("%20"," ")
+            ombd = name + " was pretty cool."
+        return ombd
+
+    def quoteRandom():
+        randomwords = ['positive', 'funny', 'inspiration', 'nature', 'courage', 'laugh', 'tech', 'exercise', 'health', 'fitness', 'laughter', 'silly', 'sunny', 'happy', 'cheerful', 'animals', 'friendship', 'success', 'patience', 'love', 'peace']
+        randomstring = str(randomwords[random.randint(0,20)])
+        url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=1&q=https://www.quotesdaddy.com/feed/tagged/"+randomstring
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        RandomQuote = data['responseData']['feed']['entries']
+        titles = []
+        for site in RandomQuote:
+            titles.append(site['title'])
+        quoterandom = '. '.join(titles)
+        quote = quoterandom
+        return quote
+
+    def reddit():
+        url = "http://www.reddit.com/r/todayilearned/new/.json?limit=1"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
+        response = urllib2.urlopen(req)
+        data = dict(json.loads(response.read()))
+        getData = data["data"]["children"][0]["data"]["title"]
+        reddit = getData.replace("TIL ","")
+        return reddit
+
+    def scienceNews():
+        url = "https://rss.sciencedaily.com/top.xml"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
+        xml = urllib2.urlopen(req).read()
+        tree = ElementTree.fromstring(xml)
+        data=[]
+        for item in tree.findall('.//item'):
+            for description in item.findall('.//description'):
+                response = description.text
+                response = response.replace("‘","").replace("’","").replace("`","")
+            result = (response)
+            data.append(result)
+        randScience = str(data[random.randint(0,30)])
+        scienceNews = randScience
+        return scienceNews
+
+    def spaceLaunch():
+        url = "https://launchlibrary.net/1.2/launch/next/5"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        launchInfo = ""
+        num=0
+        for item in data:
+            abbrev = data['launches'][num]['location']['pads'][0]['agencies'][0]['abbrev']
+            if abbrev == "NASA":
+                date = data['launches'][num]['net']
+                description = data['launches'][num]['missions'][0]['description']
+                spaceLaunch = "Here is the next launch info " + description + " It is scheduled for " + date
+            else:
+                num=num+1
+        if launchInfo == "":
+            date = data['launches'][0]['net']
+            description = data['launches'][0]['missions'][0]['description']
+            spaceLaunch = "I love space launches, here is the next one. " + description + " It is scheduled for " + date
+        return spaceLaunch
+
+    def spacePeople():
+        url = "http://api.open-notify.org/astros.json"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        numberSpace = data['number']
+        spacePeople = "Currently there are " + str(numberSpace) + " persons in space."
+        return spacePeople
+
+    def sunRiseSet():
+        url = "https://query.yahooapis.com/v1/public/yql?q=select%20astronomy%20from%20weather.forecast%20where%20woeid%3D12795729&format=json&diagnostics=true&callback="
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+
+        sunrise = data['query']['results']['channel']['astronomy']['sunrise']
+        sunset = data['query']['results']['channel']['astronomy']['sunset']
+
+        riseA,riseB = sunrise.split(":")
+        setA,setB = sunset.split(":")
+
+        if len(setB) == 4:
+            timesunset = setA + ":" + "0" + setB
+        else:
+            timesunset = sunset
+
+        if len(riseB) == 4:
+            timesunrise = riseA + ":" + "0" + riseB
+        else:
+            timesunrise = sunrise
+        sunRiseSet = "Sunrise is at " + timesunrise + ". Sunset is at " + timesunset
+        return sunRiseSet
+
+    def toDo():
+        url = 'https://raw.githubusercontent.com/ekt1701/Alexa-Good-Morning/master/todo.csv'
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        for todayrow in cr:
+            toDo = str(todayrow)
+        return toDo
+
+    def wordDay():
+        url = "https://wordsmith.org/awad/rss1.xml"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
+        xml = urllib2.urlopen(req).read()
+        tree = ElementTree.fromstring(xml)
+        for item in tree.findall('.//item'):
+            for title in item.findall('.//title'):
+                title = title.text
+            for description in item.findall('.//description'):
+                description = description.text
+            wordDay = ("Today's word is " + title + ". It means " + description)
+        return wordDay
+
+
+    if parts[0] == "catFacts":
+        results = catFacts()
+    elif parts[0] == "cnnNews":
+        results = cnnNews(" ".join(parts[1:]))
+    elif parts[0] == "currentWeather":
+        results = currentWeather()
+    elif parts[0] == "definition":
+        results = definition(" ".join(parts[1:]))
+    elif parts[0] == "duckDuck":
+        results = duckDuck(" ".join(parts[1:]))
+    elif parts[0] == "exchangeRate":
+        results = exchangeRate()
+    elif parts[0] == "myLA":
+        results = myLA(" ".join(parts[1:]))
+    elif parts[0] == "omdb":
+        results = omdb(" ".join(parts[1:]))
+    elif parts[0] == "quoteRandom":
+        results = quoteRandom()
+    elif parts[0] == "reddit":
+        results = reddit()
+    elif parts[0] == "scienceNews":
+        results = scienceNews()
+    elif parts[0] == "spaceLaunch":
+        results = spaceLaunch()
+    elif parts[0] == "spacePeople":
+        results = spacePeople()
+    elif parts[0] == "toDo":
+        results = toDo()
+    elif parts[0] == "sunRiseSet":
+        results = sunRiseSet()
+    elif parts[0] == "wordDay":
+        results = wordDay()
+
+
+    return results
+< object
