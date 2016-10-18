@@ -2,7 +2,7 @@
 
 + what do you know
 - I thought of this poem: <call>haiku</call> What did you think?
-- <call>resource quote</call> Did you like the quote?
+- <call>resource quoteRandom</call> Did you like the quote?
 - <call>resource scienceNews</call> Science is cool.
 - <call>resource myLA random</call>  Something is always going on in Los Angeles.
 - <call>resource cnnNews random</call> It is hard to keep up with all the news.
