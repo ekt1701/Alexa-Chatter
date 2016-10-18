@@ -1,6 +1,8 @@
 # Alexa-Rivescript-Chatbot
 
-This chatbot based on Rivescript https://www.rivescript.com/ it is easier to modify and extend than AIML.  The chatbot has persistence, so it can remember things such as your name or age, tell a knock knock joke, keep track in a RPG game.
+This is a work in progress project and will slowly be updated.
+
+The chatbot based on Rivescript https://www.rivescript.com/ it is easier to modify and extend than AIML.  The chatbot has persistence, so it can remember things such as your name or age, tell a knock knock joke, keep track in a RPG game.
 
 Some things you can ask are tell me a joke, tell me a story, make me think, play a game.  The chatbot can also get information from the Internet, such as get my weather, what is my to do list, get a random quote, get headline news from CNN, even "search for " using Duck Duck Go
 
