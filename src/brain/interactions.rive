@@ -1,5 +1,8 @@
 //Additional conversation responses
 
++ (help|what can i say)
+- you can ask, tell me a cat fact, give me a random quote, when is the next space launch, what are the headline news, what is the word of the day, tell me a poem, play a game, say make me think, play a word game and what do you know.
+
 + (repeat|what did you say)
 - <reply>
 
