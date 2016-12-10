@@ -1,8 +1,8 @@
-# Alexa-Rivescript-Chatbot
+# Alexa-Chatter
 
-This is a work in progress project and will slowly be updated.
+This is a work in progress project.
 
-The chatbot based on Rivescript https://www.rivescript.com/ it is easier to modify and extend than AIML.  The chatbot has persistence, so it can remember things such as your name or age, tell a knock knock joke, keep track in a RPG game.
+Chatter is a programmable assistant that can get information from a number of sources. for example, weather, traffic APIs, rss feeds and more.  The brains behind Chatter is Rivescript a simple scripting language for chatbots.  Chatter uses Alexa Skills Kit catchall custom slot to capture what the users says, then Rivescript parses the utterances to the appropriate action.
 
 Some things you can ask are tell me a joke, tell me a story, make me think, play a game.  The chatbot can also get information from the Internet, such as get my weather, what is my to do list, get a random quote, get headline news from CNN, even "search for " using Duck Duck Go
 
