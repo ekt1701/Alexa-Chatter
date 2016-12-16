@@ -60,7 +60,7 @@ Wolfram Alpha http://api.wolframalpha.com Requires API key
 WordNet - Definition http://chriscargile.com/dictionary/json/
 
 Chatter can access common rss or xml feeds, google alerts and reddit topics.
-RSS feeds for CNN, Reuters, Wall Street Journal, New York Times, Science Daily, NASA, CNET, Crunch Gear, Gadget Flow
+RSS feeds for CNN, Reuters, Wall Street Journal, New York Times, Science Daily, NASA, CNET, Crunch Gear, Gadget Flow and more.
 
 Daily feeds for quote of the day, word of the day, history of the day, what happened on this day
 
@@ -77,6 +77,8 @@ There are also some simple games written in Rivescript, such as a RPG demo, word
 To get started, say help me or what can I say, to get a basic list of the things you can say to Chatter.  Of course, since Chatter is a chatbot, you can also chat, though, currently the interactions are limited.
 
 To debug the interactions, if there is something Chatter does not understand, it will say: "I have no response for " and repeat what you said.
+
+All the code which runs Chatter is found in the brain directory.  You can easily change the wording of the commands, add other rss feeds or add functions.  With Rivescript, Chatter is easy to customize for your own use.
 
 Instructions:
 
