@@ -32,6 +32,7 @@ import pprint
 import copy
 import codecs
 import time
+from six import text_type
 
 from . import __version__
 from . import python
@@ -2274,11 +2275,19 @@ the value is unset at the end of the `reply()` method)."""
                 parts = data.split("=")
                 self._say("Set uservar " + unicode(parts[0]) + "=" + unicode(parts[1]))
                 self._users[user][parts[0]] = parts[1]
-            elif tag in ["add", "sub", "mult", "div"]:
-                # Math operator tags.
-                parts = data.split("=")
-                var   = parts[0]
-                value = parts[1]
+            elif tag in ["add", "sub", "mult", "div", "rnd"]:
+                if tag == "rnd":
+                    parts = data.split(":")
+                    var   = parts[0]
+                    value = parts[1]
+                    nend = parts[2]
+                    nend =int(nend)
+                else:
+                    # Math operator tags.
+                    parts = data.split("=")
+                    var   = parts[0]
+                    value = parts[1]
+
 
                 # Sanity check the value.
                 try:
@@ -2301,6 +2310,9 @@ the value is unset at the end of the `reply()` method)."""
                         new = orig * value
                     elif tag == "div":
                         new = orig / value
+                    elif tag == "rnd":
+                        new = random.randrange(value,nend)
+
                     self._users[user][var] = new
                 except:
                     insert = "[ERR: Math couldn't '{}' to value '{}']".format(tag, self._users[user][var])
@@ -2310,7 +2322,7 @@ the value is unset at the end of the `reply()` method)."""
                 # Unrecognized tag.
                 insert = "\x00{}\x01".format(match)
 
-            reply = reply.replace("<{}>".format(match), insert)
+            reply = reply.replace("<{}>".format(match), text_type(insert))
 
         # Restore unrecognized tags.
         reply = reply.replace("\x00", "<").replace("\x01", ">")
