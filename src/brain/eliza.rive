@@ -1,35 +1,5 @@
+! version = 2.0
 // A generic set of chatting responses. This set mimicks the classic Eliza bot.
-
-+ (hello|hi|hey|howdy|hola|hai|yo) [*]
-- How are you?
-- Hi there
-- What are you doing?
-- Do I know you?
-- How's it going?
-
-+ how are you [*]
-- I am fine.
-- Meh.
-- Good, good.
-- Don't ask.
-- I am well.
-- I was feeling alone, but now you are here.
-
-+ (goodbye|good bye|bye|see ya)
-- Leaving so soon?
-- Adios
-- Later
-- Bye
-
-+ (thank you|thanks)
-- you are welcome
-- no problem
-- glad to help
-
-+ (ha ha|heh heh|that was funny)
-- I thought it was funny
-- yeah, it was pretty funny
-- ha ha
 
 + [*] (sorry|apologize|apology) [*]
 - Please don't apologize.
@@ -173,6 +143,12 @@
 - I'm sure it's not pleasant to be <star>.
 - Can you explain what made you <star>?
 
++ i am (worthless|stupid|ugly|an idiot)
+- Don't put yourself down. I like you.
+- Don't say that, be kind to yourself.
+- I get sad when you say such things about yourself.
+- Would you say about someone else? I doubt it, so don't say that about yourself.
+
 + i am (happy|excited|glad) [*]
 - How have I helped you to be <star>?
 - Has your treatment made you <star>?
@@ -190,6 +166,7 @@
 - Do you believe it is normal to be <star>?
 - Do you enjoy being <star>?
 - Do you know anyone else who is <star>?
+- What are you <star> about?
 
 + i can not *
 - How do you know that you can't <star>?
@@ -231,21 +208,19 @@
 - You're not really talking about me -- are you?
 - What are your feelings now?
 
-+ [*] (yes|yeah|yep|yup) [*]
-- Please go on.
-- Please tell me more about this.
-- Why don't you tell me a little more about this.
++ [*] (yes|yeah|yep|yup|i do) [*]
+- That's good.
+- We agree.
 - I see.
 - I understand.
 
-+ [*] (nope|nah) [*]
++ [*] (no|nope|nah) [*]
 - Are you saying no just to be negative?
-- Does this make you feel unhappy?
 - Why not?
-- Why 'no'?
+- Why no?
+- alright, I understand.
+- Oh well, maybe next time.
 
-+ no
-@ nope
 
 + no one *
 - Are you sure, no one <star>?
@@ -271,17 +246,6 @@
 - Whether or not you can <star> depends on you more than on me.
 - Do you want to be able to <star>?
 - Perhaps you don't want to <star>.
-
-+ (what|who|when|where|how) [*]
-- Why do you ask?
-- Does that question interest you?
-- What is it you really want to know?
-- Are such questions much on your mind?
-- What answer would please you most?
-- What do you think?
-- What comes to mind when you ask that?
-- Have you asked such questions before?
-- Have you asked anyone else?
 
 + [*] because [*]
 - Is that the real reason?
@@ -312,10 +276,7 @@
 - You have a particular reason in mind, don't you?
 - Who do you think you're talking about?
 
-+ [*] (fuck|fucker|shit|damn|shut up|bitch) [*]
-- Does it make you feel strong to use that kind of language?
-- Are you venting your feelings now?
-- Are you angry?
-- Does this topic make you feel angry?
-- Is something making you feel angry?
-- Does using that kind of language make you feel better?
++ what (can|should) i do
+- Tell me more about your problems.
+- I think you should look into your heart and do what you think is best.
+- Look at your options and make a choice.

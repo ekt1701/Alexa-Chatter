@@ -1,22 +1,45 @@
 //Create random responses
 
-+ what do you know
-- I thought of this poem: <call>haiku</call> What did you think?
-- <call>resource quoteRandom</call> Did you like the quote?
-- <call>resource scienceNews</call> Science is cool.
-- <call>resource myLA random</call>  Something is always going on in Los Angeles.
-- <call>resource cnnNews random</call> It is hard to keep up with all the news.
-- <call>resource spaceLaunch</call> Space above and beyond.
-- <call>resource spacePeople</call> woo hoo
-- I learned this word <call>resource wordDay</call> See I'm getting smarter all the time
-- Today I learned <call>resource reddit</call> Isn't that neat?
++ what [else] do you (know|think)
+- I though of this poem: <call>haiku</call> What did you think of it?
+- I like this quote. <call>function randomQuote</call> That was a good quote.
+- Here is something I learned about science. <call>newsreader newsRSS https://rss.sciencedaily.com/top.xml 1 off </call>  I like science news.
+- In national news. <call>newsreader newsRSS http://feeds.reuters.com/reuters/topNews 1 off </call> I keep up with the news.
+- I heard this will be the next space launch. <call>function spaceLaunch</call> Space above and beyond.
+- I know how many people in space right now. <call>function spacePeople</call> woo hoo
+- I learned this word <call>newsreader newsRSS http://feeds.feedburner.com/wordthink/vIYJ?format=xml 1 on </call>   See I'm getting smarter all the time
 - knock knock
+- Can you unlock this life's mystery. <call>function imponderables</call> So what is the answer?
+- Here is a totally random fact. <call>function randomFacts</call>  Did you know that?
+- <call>function randomJoke</call> Ha Ha
+- Maybe this will inspire you. <call>function inspireMe</call> Were you inspired?
+- I had this thought. <call>newsreader reddit Showerthoughts 1 </call> Interesting thought, I'd say.
+- I know a six word short story, here it is. <call>newsreader reddit sixwordstories 1 </call> Can you make a six word story?
+- <call>proverbs Wisdom 6 40</call>
+- <call>proverbs Life 3 45</call>
+- <call>proverbs Work 27 4</call>
 
-//Haiku code from http://www.101computing.net/haiku-generator-in-python/
+
 
 + [*] (poem|haiku) [*]
 - <call>haiku</call>
 
++ [give me a] (proverbs|proverb|wise saying)
+@ proverb
+
++ proverb
+- <call>proverbs Friendship 0 17</call>
+- <call>proverbs Love 1 25</call>
+- <call>proverbs Relationships 2 41</call>
+- <call>proverbs Life 3 45</call>
+- <call>proverbs Conversation 5 30</call>
+- <call>proverbs Wisdom 6 40</call>
+- <call>proverbs Work 27 4</call>
+- <call>proverbs Growth 10 25</call>
+- <call>proverbs Business 12 36</call>
+- <call>proverbs Fools 13 26</call>
+
+//Haiku code from http://www.101computing.net/haiku-generator-in-python/
 > object haiku python
     from random import randint
 
@@ -41,5 +64,24 @@
     haiku = haiku + wordList6[wordIndex6] + " " + wordList7[wordIndex7] + "."
 
     return haiku
+
+< object
+
+
+> object proverbs python
+    import urllib2
+    import json
+    import random
+    topic = args[0]
+    idx = int(args[1])
+    count = int(args[2])
+    number= random.randrange(0,count)
+    url = "https://botwiki.org/api/corpora/data/words/proverbs.json"
+    req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+    response = urllib2.urlopen(req)
+    info = dict(json.loads(response.read()))
+    text = info["proverbs"][idx][topic][number]
+    proverbs ="Here is a proverb regarding "+topic+". "+ text + " <break time='1s'/> That is an oldie but goodie."
+    return proverbs
 
 < object

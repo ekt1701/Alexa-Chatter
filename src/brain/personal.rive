@@ -1,0 +1,98 @@
+! version = 2.0
+//Personal things
+
+//Create routines my combining commands.
++ [*] good morning [*]
+- Good morning. Here are things on your <call>personal myThings todo</call>  These are the events on your <call>personal myThings calendar</call> Here is the word of the day <call>newsreader newsRSS http://feeds.feedburner.com/wordthink/vIYJ?format=xml 1 on </call>  Finally a motivating thought. <call>newsreader newsRSS http://feeds.feedburner.com/quotationspage/mqotd 1 on </call>  Now you are ready to start the day.
+
++ [*] get my news [*]
+- In national news. <call>newsreader newsRSS http://rss.cnn.com/rss/cnn_topstories.rss 5 off </call>  In tech news. <call>newsreader newsRSS http://www.techmeme.com/feed.xml 5 off </call> In Science news. <call>newsreader newsRSS https://rss.sciencedaily.com/top.xml 5 off </call> In A.I. news <call>newsreader reddit artificial 5</call> In sports news <call>newsreader newsRSS http://api.foxsports.com/v1/rss?partnerKey=zBaFxRyGKCfxBagJG9b8pqLyndmvo7UU 5 off </call> That was your news briefing.
+
++ [*] get my alerts [*]
+- Here are the alerts for Amazon Echo. <call>newsreader googleAlerts https://www.google.com/alerts/feeds/15961848413950729082/16871229037158962966 3 off</call> Getting the latest alerts for Google Home. <call>newsreader googleAlerts https://www.google.com/alerts/feeds/15961848413950729082/621807172833270332 3 off </call> Getting the latest alerts for chat bots. <call>newsreader googleAlerts https://www.google.com/alerts/feeds/15961848413950729082/4557782760590498150 3 off </call> Those were the latest alerts.
+
+
+// A place to remember things
+// Say my memory help to get your keywords.
++ [*] my memory [for] [a] *
+- <call>personal myMemory <star></call>
+
+
+//Simple calendar and to do list using a cvs file.
++ [*] my calendar [*]
+- Here are the events on your <call>personal myThings calendar</call>
+
++ [*] my to do [*]
+- Here are things on your <call>personal myThings todo</call>
+
+
+// If you create an account at 30boxes.com, you can get your events and to do by RSS.
++ [*] demo calendar
+- Here are the next 5 events on your calendar <call>newsreader newsRSS http://30boxes.com/rss/47/Joe30Boxes/eb04a8221821efb814e35f372b9b33e5/0/ 5 off </call> Now you know what is coming up.
+
++ [*] demo to do [*]
+- Here are the top 3 items on your to do list <call>newsreader newsRSS http://30boxes.com/user/47/Joe30Boxes/todos/all/rss/5775f680687bb707d0049093566f3402 3 off </call>
+
+
+> object personal python
+    import csv
+    import re
+    import urllib2
+
+    command = " ".join(args)
+    parts = command.split(" ")
+
+    def myMemory(name):
+        url = 'https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/myMemory.csv'
+        response = urllib2.urlopen(url)
+        contents = csv.reader(response)
+        if name == "help":
+            data = []
+            for row in contents:
+                data.append(row[0])
+            keywords = ' '.join(data)
+            words = keywords.split()
+            wordkeys = ", ".join(sorted(set(words), key=words.index))
+            myMemory = "Here are your keywords " + str(wordkeys) + " What do you want to remember?"
+        else:
+            records=[]
+            element = ""
+            for row in contents:
+                for element in row:
+                    if name in element.lower():
+                        title = row[0]
+                        description = row[1]
+                        date = row[2]
+                        summary = str(description) + " on " + str(date)
+                        records.append(summary)
+            myMemory = ' '.join(records)
+            if myMemory == "":
+                myMemory = "I could not find "+name+" in your memory"
+        return myMemory
+
+
+    def myThings(flag):
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        for todayrow in cr:
+            if cr.line_num == 2:
+                toDo = str(todayrow)
+            if cr.line_num == 3:
+                calendar = str(todayrow)
+        if flag == "todo":
+            myThings = toDo
+        if flag == "calendar":
+            myThings = calendar
+        myThings = myThings.replace("['","").replace("]","").replace("'","")
+        return myThings
+
+
+    if parts[0] == "myThings":
+        results = myThings(" ".join(parts[1:]))
+    elif parts[0] == "myMemory":
+        results = myMemory(" ".join(parts[1:]))
+
+
+    return results
+< object

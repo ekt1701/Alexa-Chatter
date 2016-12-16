@@ -1,0 +1,580 @@
+! version = 2.0
+// Services that require API Key
+
+//Weather commands
++ [*] air quality
+- <call>function_api airNow</call>
+
++ [*] temperature [*]
+- <call>function_api darkSky temperature</call> Now you know what to wear.
+
++ [*] humidity [*]
+- <call>function_api darkSky humidity</call>
+
++ [*] (sunrise|sunset)
+- <call>function_api darkSky sunrise</call>
+
++ [*] (my|the) weather
+- <call>function_api darkSky weather</call> Do you want to hear the seven day forecast?
+
++ (yes|yup|roger|of course|yes i do)
+% * do you want to hear the seven day forecast
+- <call>function_api darkSky forecast</call> Now you know what the weather will be like.
+
++ (no|nope|nah|not now)
+% * do you want to hear the seven day forecast
+- okay, maybe later then
+
++ [*] my forecast [*]
+- <call>function_api darkSky forecast</call> Now you know what the weather will be like.
+
++ [when] will it rain
+- Checking the forecast models. <call>function_api darkSky rain</call>
+
++ [how is] the weather in *
+- <call>function_api openWeather <star></call> Do you wish to be in <star>?
+
++ [what is] the weather in *
+- <call>function_api openWeather <star></call> Do you wish to be in <star>?
+
++ [*] [full] weather report [*]
+- Getting the data from weather underground. <call>function_api wuReport </call> Now you are a weather expert for today.
+
+
+//Search query
++ [*] get answer [for] *
+- Querying Wolf Ram Alpha <call>function_api wolfRam <star></call> I think Wolf Ram Alpha is cool.
+
++ [*] search (wolf ram|wolfram) [for] *
+- Querying Wolf Ram Alpha <call>function_api wolfRam <star></call> I think Wolf Ram Alpha is cool.
+
++ [*] another word [for] *
+- Contacting bighugelabs.com <call>function_api thesarus <star></call> What else can I do for you?
+
++ [*] [what is] synonym [for] *
+- Contacting bighugelabs.com <call>function_api thesarus <star></call> What else can I do for you?
+
+
+//Traffic reports
++ [*] [get|how is] my traffic
+- Checking the traffic. <call>function_api googleTraffic</call> do you want to hear the directions?
+
++ (yes|yup|roger|of course)
+% * do you want to hear the directions
+- <call>function_api googleDirections</call> You are all set, be careful out there.
+
++ (no|nope|nah|not now)
+% * do you want to hear the directions
+- okay, you must know how to get there already.
+
++ [*] get directions [*]
+- <call>function_api googleDirections</call> You are all set, be careful out there.
+
++ [*] traffic (report|reports|status|incidents|) [*]
+- Let's see what's going on. <call>function_api localIncidents</call> Be careful out there.
+
+
+//Fun Stuff
++ [*] (flight info|check radar|get radar) [*]
+- Checking the radar for interesting flights. <call>function_api flightInfo</call>
+
+
+
+> object function_api python
+    import urllib2
+    import json
+    import datetime
+    import re
+    import time
+    import random
+    import csv
+    from xml.etree import ElementTree
+    from math import radians, cos, sin, asin, sqrt
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
+    command = " ".join(args)
+    parts = command.split(" ")
+
+    def airNow():
+        #Get API key  https://docs.airnowapi.org/account/request/
+        apiKey = "YOUR_KEY"
+
+        #Set the zipcode to your location
+        zipcode = str('92802')
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Air Now."
+            return noKey
+
+        url = "http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode="+zipcode+"&distance=10&API_KEY="+apiKey
+        print (url)
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+        r = urllib2.urlopen(req)
+        json_text = r.read().decode('utf-8')
+        aqresult = json.loads(json_text)
+        print (aqresult)
+        air=[]
+        for line in aqresult:
+            reportTime = line['HourObserved']
+            if "O3" in line['ParameterName']:
+                airqi = "the ozone level as " + str(line['AQI']) + " which is rated "  + str(line['Category']['Name']) + "."
+            elif "PM2.5" in line['ParameterName']:
+                airqi = "The Air Quality as " + str(line['AQI']) + " which is rated "  + str(line['Category']['Name']) + "."
+            air.append(airqi)
+        airnowtemp = " ".join(air)
+        airNow = "Air Now reports " + airnowtemp + "<break time='1s'/> "
+        return airNow
+
+
+    def darkSky(flag):
+        #Register for API https://darksky.net/dev/register
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Dark Sky."
+            return noKey
+
+        #Set the base location
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        row=[]
+        for row in cr:
+            if cr.line_num == 1:
+                lat = row[1]
+                lon = row[2]
+
+        url = "https://api.darksky.net/forecast/"+apiKey+"/"+lat+","+lon+"?exclude=[alerts,flags]"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        currentTemp = data['currently']['temperature']
+        currentTemp = round(currentTemp,0)
+        currentCondition = data['currently']['summary']
+        currentHumidity = data['currently']['humidity']
+        humidity = int(currentHumidity*100)
+        currentWindspeed = data['currently']['windSpeed']
+        currentWindspeed = round(currentWindspeed,0)
+        if flag != "tokyo":
+            minuteSummary = data['minutely']['summary']
+        hourSummary = data['hourly']['summary']
+        pressure = data['currently']['pressure']
+        dp = dp =float(pressure)
+        currentPressure = str(round((dp*0.0295301),2))
+        forecast = data['daily']['data']
+        today = forecast[0]
+        todaySummary = today['summary']
+        sunSet = today['sunsetTime'] - 28800 # Adjust for PST
+        sunRise = today['sunriseTime'] - 28800
+        todaySunrise = datetime.datetime.fromtimestamp(int(sunRise)).strftime('%I:%M%p')
+        todaySunset = datetime.datetime.fromtimestamp(int(sunSet)).strftime('%I:%M%p')
+        d = divmod(sunSet-sunRise,86400)  # days
+        h = divmod(d[1],3600)  # hours
+        m = divmod(h[1],60) # minutes
+        todayHigh = today['temperatureMax']
+        todayHigh = round(todayHigh,0)
+        forecastSummary = data['daily']['summary']
+        forecastSummary = forecastSummary.replace("°F"," degrees")
+        if flag == "temperature":
+            report = "Currently, it is " + currentCondition + ". The temperature is " + str(int(currentTemp)) + " degrees. The high temperature will be " + str(int(todayHigh)) + " degrees. It will be " + str(minuteSummary) + "<break time='1s'/> "
+        elif flag == "humidity":
+            if int(humidity) > 50:
+                report = "Currently, the humidity is " + str(int(humidity)) + " percent." + "<break time='1s'/> No wonder it feels wet."
+            else:
+                report = "Currently, the humidity is " + str(int(humidity)) + " percent." + "<break time='1s'/> No wonder it feels dry."
+        elif flag == "sunrise":
+            report = "Sun rise will be at " + str(todaySunrise) + " and sun set will be at " + str(todaySunset) + " There will be " + str(h[0]) + " hours and " + str(m[0]) + " minutes of sunlight." + "<break time='1s'/> "
+        elif flag == "weather":
+            report = "Currently, it is " + currentCondition + " . The temperature is " + str(int(currentTemp)) + " degrees. Humidity is " +str(int(humidity)) + " percent. Wind speed is " + str(int(currentWindspeed)) + " mph. Pressure is " + str(currentPressure) + " millibars.  Conditions will be " + str(hourSummary) + " The high temperature will be " + str(int(todayHigh)) + ". " +forecastSummary + "<break time='1s'/> "
+        elif flag == "forecast":
+            week = []
+            for day in forecast[1:6]:
+                time = "Forecast for " +datetime.datetime.fromtimestamp(int(day['time'])).strftime('%A')
+                summary = " is " + day['summary']
+                max_temp = " The high will be "+ str(int(day['temperatureMax'])) + " degrees."
+                min_temp = " The low will be " + str(int(day['temperatureMin'])) + " degrees."
+                percip_chance = " The chance of rain will be " + str(int(day['precipProbability'] * 100)) + "%."
+                if percip_chance == " The chance of rain will be 0%.":
+                    percip_chance = " "
+                week.append(time+summary+max_temp+min_temp+percip_chance)
+            forecast = ' '.join(week)
+            report = forecast + "<break time='1s'/> "
+        elif flag == "rain":
+            rainChance = []
+            willRain = 0
+            for day in forecast[0:7]:
+                percip_chance = " The chance of rain will be " + str(int(day['precipProbability'] * 100)) + "%."
+                if percip_chance != " The chance of rain will be 0%.":
+                    rain = "There will be a " + str(int(day['precipProbability'] * 100)) + "% chance of rain on "+datetime.datetime.fromtimestamp(int(day['time'])).strftime('%A')
+                    summary = ", with " + day['summary']
+                    max_temp = " The high will be "+ str(int(day['temperatureMax'])) + " degrees."
+                    min_temp = " The low will be " + str(int(day['temperatureMin'])) + " degrees."
+                    rainChance.append(rain+summary+max_temp+min_temp)
+                    willRain = 1
+            if willRain == 1:
+                forecast = ' '.join(rainChance)
+                report = forecast + "<break time='1s'/> Looks like you will need an umbrella."
+            else:
+                report = "There is no chance for rain in the next 7 days. <break time='1s'/> No need for an umbrella for the next several days."
+        return report
+
+
+    def flightInfo():
+        #Register for API If you want to get the location and distance of the aircraft from your base location:
+        # https://developer.mapquest.com/plan_purchase/steps/business_edition/business_edition_free/register
+
+        apiKey = "YOUR_KEY"
+
+        #Set the base location
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        row=[]
+        for row in cr:
+            if cr.line_num == 1:
+                base_lat = row[1]
+                base_lon = row[2]
+
+        # Get all flights flagged as interesting within 30km
+        url = "https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json?lat="+base_lat+"&lng="+base_lon+"&fDstL=0&fDstU=30&fIntQ=true"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+        response = urllib2.urlopen(req)
+        data = dict(json.loads(response.read()))
+        aircrafts = data['acList']
+        aircraft=[]
+        for craft in aircrafts:
+            type = craft['Mdl']
+            operator = craft['Op']
+            lat = str(craft['Lat'])
+            lon = str(craft['Long'])
+
+            #Get location for current flight
+            if apiKey == "YOUR_KEY":
+                  aircraft.append(type + " " + operator)
+            else:
+                geourl="http://www.mapquestapi.com/geocoding/v1/reverse?key="+apiKey+"&location="+lat+","+lon
+                req = urllib2.Request(geourl, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+                response = urllib2.urlopen(req)
+                data = dict(json.loads(response.read()))
+                address = data['results'][0]['locations'][0]['street']
+                city = data['results'][0]['locations'][0]['adminArea5']
+                location = address + " " + city
+
+                #Calculate distance between flight and base location
+                lat1 = float(base_lat)
+                lon1 = float(base_lon)
+                lat2 = float(lat)
+                lon2 = float(lon)
+                p = 0.017453292519943295
+                a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+                distance= 7912 * asin(sqrt(a))
+                distance = int(distance)
+                aircraft.append(type + " " + operator + " Currently over " + str(location) + " about " + str(distance) + " miles from here. ")
+        flightInfo = " <break time='500ms'/>  ".join(aircraft)
+        flightInfo = flightInfo.replace("&","and")
+        if flightInfo == "":
+            flightInfo = "I could not locate any interesting flights at this time.  What else can we do?"
+        else:
+            flightInfo = flightInfo + " <break time='1s'/>  Eyes in the skies are keeping watch over us."
+        return flightInfo
+
+
+    def googleTraffic():
+        #Get API key from https://developers.google.com/maps/
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Google Maps."
+            return noKey
+
+        #Origin and Destination is set in this file
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        row=[]
+        for row in cr:
+            if cr.line_num == 4:
+                trafficLocation = row[1]
+                trafficOrigin = row[2]
+                trafficDest = row[3]
+        #Get API key from https://developers.google.com/maps/
+
+        url = "https://maps.googleapis.com/maps/api/directions/json?origin="+trafficOrigin+"&destination="+trafficDest+"&departure_time=now&key="+apiKey
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        distance = data['routes'][0]['legs'][0]['distance']['text']
+        distance = distance.replace("mi","miles")
+        durationtraffic = data['routes'][0]['legs'][0]['duration_in_traffic']['text']
+        durationtraffic = durationtraffic.replace("mins","minutes")
+        googleTraffic = "Going to "+str(trafficLocation) + " is about " + str(distance) + " and will take about " +str(durationtraffic)
+        return googleTraffic
+
+
+    def googleDirections():
+        #Get API key from https://developers.google.com/maps/
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Google Maps."
+            return noKey
+
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        row=[]
+        for row in cr:
+            if cr.line_num == 4:
+                trafficLocation = row[1]
+                trafficOrigin = row[2]
+                trafficDest = row[3]
+
+        url = "https://maps.googleapis.com/maps/api/directions/json?origin="+trafficOrigin+"&destination="+trafficDest+"&departure_time=now&key="+apiKey
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        route = data['routes'][0]['legs'][0]['steps']
+        durationtraffic = data['routes'][0]['legs'][0]['duration_in_traffic']['text']
+        direct = []
+        for step in route:
+            directions = step['html_instructions']
+            directions = re.sub(r'<(.|\n)+?>', ' ', directions)
+            direct.append(directions)
+        instructions = " <break time='500ms'/> ".join(direct)
+
+        googleDirections = "Here are the directions to " + str(trafficLocation) + ". " + str(instructions)
+        return googleDirections
+
+
+    def localIncidents():
+        #Register for API:
+        # https://developer.mapquest.com/plan_purchase/steps/business_edition/business_edition_free/register
+
+        # Instructions for Traffic Incidents:
+        # https://developer.mapquest.com/documentation/traffic-api/incidents/get/
+
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Map Quest."
+            return noKey
+
+        #Set the bounding box
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+        response = urllib2.urlopen(url)
+        cr = csv.reader(response)
+        row=[]
+        for row in cr:
+            if cr.line_num == 7:
+                box = row[1]
+
+        url = "http://www.mapquestapi.com/traffic/v2/incidents?key="+apiKey+"&boundingBox="+box+"&filters=congestion,incidents,event,construction"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        incidents=[]
+        for event in data['incidents']:
+            description = event['fullDesc']
+            incidents.append(description + " <break time='1s'/> ")
+        localIncidents = " ".join(incidents)
+        if localIncidents == "":
+            localIncidents = "Amazing, there are no traffic incidents at this moment!"
+        return localIncidents
+
+
+    def openWeather(location):
+        #Get API key: https://home.openweathermap.org/users/sign_up
+
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Open Weather."
+            return noKey
+
+        url='http://api.openweathermap.org/data/2.5/weather?q='+location+'&units=imperial&appid='+apiKey
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        description = data['weather'][0]['description']
+        temperature = data['main']['temp']
+        temperature = int(temperature)
+        humidity = data['main']['humidity']
+        pressure = data['main']['pressure']
+        wind = data['wind']['speed']
+        openWeather = "The weather in " + location + " is " + description + " the temperture is " + str(temperature) + " degrees. Humidity is " + str(humidity) + " percent. Wind speed is " + str(wind) + " miles per hour "
+        return openWeather
+
+
+    def thesarus(request):
+        #Get API Key: http://words.bighugelabs.com/getkey.php
+
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Big Huge Labs."
+            return noKey
+
+        check = request.split(" ")
+        try:
+            word = check[1]
+        except:
+            word = request
+
+        url = "http://words.bighugelabs.com/api/2/"+apiKey+"/" + word + "/json"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+        data = urllib2.urlopen(req)
+        response = dict(json.loads(data.read()))
+        synonym_list = {}
+        try:
+            for key in response:
+                if key in [u'noun', u'verb', u'adjective', u'adverb']:
+                    if u'syn' in response[key]:
+                        synonym_list[key] = response[key][u'syn']
+            try:
+                nouns = synonym_list["noun"]
+                nouns = ", ".join(nouns)
+            except:
+                nouns = ""
+            try:
+                verbs = synonym_list["verb"]
+                verbs = ", ".join(verbs)
+            except:
+                verbs = ""
+            try:
+                adjectives = synonym_list["adjective"]
+                adjectives = ", ".join(adjectives)
+            except:
+                adjectives = ""
+            try:
+                adverbs = synonym_list["adverb"]
+                adverbs = ", ".join(adverbs)
+            except:
+                adverbs = ""
+            thesarus = "Here are all the synonyms I found for " + word + ". They are " +nouns + verbs + adjectives + adverbs + "<break time='1s'/> "
+        except:
+            thesarus = "I'm sorry, I could not find a synonym for the word "+ word + "<break time='1s'/> "
+        return thesarus
+
+
+    def wolfRam(query):
+        #Get API key: https://developer.wolframalpha.com/portal/apisignup.html?_ga=1.153774072.1901713210.1478028387
+
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Wolf Ram Alpha."
+            return noKey
+
+        query = query.replace(" ","%20")
+        url = "http://api.wolframalpha.com/v2/query?podindex=2,3&format=plaintext&appid="+apiKey+"&input="+query
+        xml = urllib2.urlopen(url).read()
+        tree = ElementTree.fromstring(xml)
+        data=[]
+        for pod in tree.findall('.//pod'):
+            title = pod.attrib['title']
+            for subpod in pod.findall('.//subpod'):
+                subtitle = subpod.attrib['title']
+                for plaintext in subpod.findall('.//plaintext'):
+                    output = plaintext.text
+                    if output == None:
+                        output = ""
+                    else:
+                        output = output.replace(' | ', ': ').replace('\\n', ' ').replace('(', '').replace(')', '').replace('\\xd7', '')
+                    result = (title + ": " + subtitle + " "+output)
+                    data.append(result)
+        response = " ".join(data)
+        query = query.replace("%20"," ")
+        if response == "":
+            response = "Wolfram Alpha could not find the answer."
+        else:
+            wolfRam = "The answer to your question: " + str(query) + " is: " + response + "<break time='1s'/> "
+        return wolfRam
+
+    def wuReport():
+        #Register for API Select Cumulus Plan for Developer: https://www.wunderground.com/weather/api/d/pricing.html
+
+        zipcode = "92802"
+        apiKey = "YOUR_KEY"
+
+        if apiKey == "YOUR_KEY":
+            noKey = "I'm sorry, I cannot answer your request until you register with Weather Underground."
+            return noKey
+
+        f = urllib2.urlopen("http://api.wunderground.com/api/"+apiKey+"/conditions/forecast10day/almanac/astronomy/alerts/q/"+zipcode+".json")
+        json_string = f.read()
+        parsed_json = json.loads(json_string)
+
+        time = parsed_json['current_observation']['observation_time']
+        temperature = parsed_json['current_observation']['temp_f']
+        conditions = parsed_json['current_observation']['weather']
+        humidity= parsed_json['current_observation']['relative_humidity']
+        wind = parsed_json['current_observation']['wind_string']
+        pressure = parsed_json['current_observation']['pressure_in']
+
+        sunriseHour = parsed_json['sun_phase']['sunrise']['hour']
+        sunriseMinute = parsed_json['sun_phase']['sunrise']['minute']
+        sunsetHour = parsed_json['sun_phase']['sunset']['hour']
+        sunsetMinute = parsed_json['sun_phase']['sunset']['minute']
+        riseHour = sunriseHour.replace("0","00").replace("1","01").replace("2","02").replace("3","03").replace("4","04").replace("5","05").replace("6","06").replace("7","07").replace("8","08").replace("9","09")
+        start = riseHour+sunriseMinute
+        end = sunsetHour+sunsetMinute
+        start_t = datetime.time(hour=int(start[0:2]), minute=int(start[2:4]))
+        end_t = datetime.time(hour=int(end[0:2]), minute=int(end[2:4]))
+        delta_t = datetime.timedelta(
+            hours = (end_t.hour - start_t.hour),
+            minutes = (end_t.minute - start_t.minute)
+            )
+        sunlight = str(delta_t)
+        timeHour,timeMinute,timeSeconds = sunlight.split(":")
+        sunPhase = " Sunrise will be at "+str(sunriseHour)+":"+str(sunriseMinute)+" AM and sunset will be at "+str(sunsetHour)+":"+str(sunsetMinute)+" PM There will be "+str(timeHour)+" hours "+str(timeMinute)+" minutes of sunlight."
+
+        try:
+            alerts = parsed_json['alerts'][0]['description']
+            description = parsed_json['alerts'][0]['message']
+            description = description.replace("..."," ").replace("*"," ")
+            weatherAlerts = " " +alerts + " " + description
+        except:
+            weatherAlerts = " There are no alerts at this time. "
+
+        current = "Currently the weather is "+conditions+ " the temperature is " +str(temperature)+" the humidity is "+ str(humidity)+ " the pressure is "+ str(pressure)+ " the wind is "+ wind+" <break time='500ms'/> "+sunPhase+" <break time='500ms'/> "+time+" <break time='500ms'/> "+weatherAlerts+" <break time='500ms'/> "
+
+        forecast = parsed_json['forecast']['txt_forecast']['forecastday']
+        data=[]
+        for day in forecast[0:14]:
+            title= day['title']
+            desc = day['fcttext']
+            data.append(title + ", " + desc + "")
+        text = ' '.join(data)
+        text = text.replace("F."," degrees. ").replace(" W "," West ").replace(" E "," East ").replace(" N "," North ").replace(" S "," South ").replace(" SW "," South West ").replace(" SE "," South East").replace(" NE "," North East ").replace(" NW "," North West ").replace(" ENE "," East North East ").replace(" ESE "," East South East ").replace(" NNE "," North North East ").replace(" NNW "," North North West ").replace(" SSE "," South South East ").replace(" SSW "," South South West ").replace(" WSW "," West South West ").replace(" WNW "," West North West ")
+        forecast = " Here is your seven day forecast "+text
+
+        averageHigh = parsed_json['almanac']['temp_high']['normal']['F']
+        recordHigh = parsed_json['almanac']['temp_high']['record']['F']
+        recordYear = parsed_json['almanac']['temp_high']['recordyear']
+        almanac = " The average temperature for today is "+str(averageHigh)+" degrees. The record high was "+str(recordHigh)+" degrees, set in "+ str(recordYear)+" <break time='500ms'/> "
+
+        wuReport = current + almanac + forecast
+        return wuReport
+
+
+    if parts[0] == "airNow":
+        results = airNow()
+    elif parts[0] == "darkSky":
+        results = darkSky(" ".join(parts[1:]))
+    elif parts[0] == "flightInfo":
+        results = flightInfo()
+    elif parts[0] == "googleTraffic":
+        results = googleTraffic()
+    elif parts[0] == "googleDirections":
+        results = googleDirections()
+    elif parts[0] == "localIncidents":
+        results = localIncidents()
+    elif parts[0] == "openWeather":
+        results = openWeather(" ".join(parts[1:]))
+    elif parts[0] == "thesarus":
+        results = thesarus(" ".join(parts[1:]))
+    elif parts[0] == "wolfRam":
+        results = wolfRam(" ".join(parts[1:]))
+    elif parts[0] == "wuReport":
+        results = wuReport()
+    return results
+
+
+< object

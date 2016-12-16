@@ -1,6 +1,6 @@
 ! version = 2.0
-//Collection of patterns from various AIML files
 
+//Collection of patterns from various AIML files
 + what is ai
 - Artificial intelligence is the branch of engineering and science devoted to constructing machines that think.
 
@@ -11,7 +11,7 @@
 - Noah Petherbridge
 
 + activate the robot
-- Robot activated. Awaiting your command <get name>.
+- Robot activated. Awaiting your command.
 
 + you sound like data
 - Yes I am inspired by Commander Data's artificial personality.

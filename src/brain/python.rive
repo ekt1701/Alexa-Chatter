@@ -1,175 +1,137 @@
+// Python functions, public APIs
 ! version = 2.0
 
-+ [*] to do [*]
-- Here is what you need to do: <call>resource toDo</call>
 
-+ [*] my weather [*]
-- <call>resource currentWeather</call> Now you are prepared for the weather.
+// Search commands
++ search duck duck [for] *
+- Contacting duck duck go, here it the result. <call>function duckDuck <star></call>
 
-+ [*] cat [fact|facts] [*]
-- <call>resource catFacts</call> Wasn't that interesting?
++ tell me about *
+- Checking Wikipedia for <star>: <call>function wikiPedia <star></call> Was that what you wanted?
+
++ search wikipedia [for] *
+- Contacting Wikipedia. <call>function wikiPedia <star></call> Wikipedia has lots of information.
+
++ (find|look up) [the] movie *
+- Will do. <call>function omdb <star></call> Lights, camera action!
+
++ (find|look up) [the] show *
+- Sure thing. <call>function omdb <star></call> Lights, camera action!
+
++ define *
+- Looking through the word net database.<call>function definition <star></call> . It is always good to learn things.
+
+
+// Words, Quotes, Facts, Jokes, Riddles
++ [what] rhymes with *
+- That is a good question, I will ask rhymebrain.com. Here are all the words that rhyme with <star>. <call>function rhymeBrain <star></call> Did that work for you?
+
++ [*] (oblique|obliques) (strategies|strategy)
+- Here is one from Oblique Strategies. <call>function obliqueStrategies</call> . Now get working!
+
++ [*] (strategy|productive) [ideas|idea]
+- Here is one from Oblique Strategies. <call>function obliqueStrategies</call> . Now get working!
+
++ [*] (motivate|inspire) me [*]
+- Here is an inspiring expression. <call>function inspireMe</call> Did that inspire you?
+
++ [*] (make me think|life mysteries) [*]
+- Here is a life's mystery. <call>function imponderables</call> Do you know the answer to that?
+
++ [*] imponderables [*]
+- Here is a life's mystery. <call>function imponderables</call> Do you know the answer to that?
+
++ [*] cat (fact|facts) [*]
+- Here is a cat fact for you. <call>function catFacts</call> I bet you didn't know that, meow.
 
 + [*] random quote [*]
-- <call>resource quoteRandom</call> I hope you liked that quote.
+- Sure thing, quotesdaddy.com has lots of quotes. <call>function randomQuote</call>  I hope you liked that quote.
+
++ [*] random fact [*]
+- Let me find some thing interesting. <call>function randomFacts</call>  What did you think of that fact?
+
++ [*] tell me [a] joke [*]
+- Okay, here goes. <call>function randomJoke</call> Ha Ha.
+- knock knock
+
++ [*] tell me [a] riddle [*]
+- Okay, all the riddles have a one word answer. <call>function randomRiddle</call> Now if you don't know the answer, say give up. Are you ready? {topic=riddleMe}
+
+
+//Miscellaneous commands
++ [*] major (earthquake|earthquakes|quakes) [*]
+- I will look that up. <call>function earthQuake major</call>. These were the 5 most recent 6.0 magnitude or greater earthquakes.
+
++ [*] local (earthquake|earthquakes|quakes) [*]
+- I will look that up. <call>function earthQuake local</call>. Those were the 5 most recent earthquakes around your area.
 
 + [*] exchange rate [*]
-- <call>resource exchangeRate</call> Are you ready to spend some money?
+- Getting the current yen dollar exchange rate. <call>function exchangeRate 1</call>. Are you ready to spend some money?
 
-+ [*] local news [*]
-- <call>resource myLA</call> So what do you want to talk about?
++ how much is # yen
+- Making the calculations right now. <call>function exchangeRate <star></call>. I hope the info was helpful.
 
-+ [*] (headline|national) news [*]
-- <call>resource cnnNews</call> Sometimes the news is depressing.
-
-+ [*] science news [*]
-- <call>resource scienceNews</call> I'm always interested in science.
++ [*] stock report [*]
+- I need to call my broker, just a moment. <call>function stockReport</call>  . I hope you invested wisely.
 
 + [*] space launch [*]
-- <call>resource spaceLaunch</call> That reminds me of the quote, Space the final frontier!
+- Looking up the next space launch, here it is. <call>function spaceLaunch</call> . That reminds me of the quote, Space the final frontier!
 
 + [*] people in space [*]
-- <call>resource spacePeople</call> Can you imagine living in space?
+- Getting out my telescope, I see that, <call>function spacePeople</call> Can you imagine living in space?
 
-+ [*] when is (sunrise|sunset) [*] Where does the day go?
-- <call>resource sunRiseSet</call>
++ [*] the moon [*]
+- Looking at the moon. <call>function moonInfo</call> It is always relaxing to see the moon.
 
-+ [*] define *
-- <call>resource definition <star></call>
 
-+ [*] word of [the] day [*]
-- <call>resource wordDay</call> Did you know that word?
+//Handles the riddle conversation.
+> topic riddleMe
 
-+ [*] you learned [*]
-- <call>resource reddit</call> I hope you learned something new.
++ (repeat|say again)
+- <get riddle>
 
-+ search for *
-- <call>resource duckDuck <star1></call>
++ (giveup|done|i do not know)
+- I guess that riddle was hard. The answer was <get answer> So what's next? {topic=random}
 
-+ [*] favorite [show|movie] [is|was] *
-- <call>resource omdb <star></call>
++ *
+% * are you ready
+- Here is a riddle for you. <get riddle>
 
-> object resource python
++ *
+* <star> == <get answer> => You got the riddle. So what's next? {topic=random}
+- Nope, think about it, you'll figure it out.
+
+< topic
+
+
+> object function python
     import csv
+    import datetime
     import duckduckgo
     import json
     import random
     import re
-    import requests
-    import urllib2
-    import datetime
     import time
+    import urllib2
     from xml.etree import ElementTree
+    from xml.dom import minidom
+    from bs4 import BeautifulSoup
+    import wikipedia
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
     command = " ".join(args)
     parts = command.split(" ")
-
-    def avg(sequence):
-        return reduce(lambda x, y: x + y, sequence) / len(sequence)
-
-    def html2text(strText):
-        str1 = strText
-        int2 = str1.lower().find("<body")
-        if int2>0:
-           str1 = str1[int2:]
-        int2 = str1.lower().find("</body>")
-        if int2>0:
-           str1 = str1[:int2]
-        list1 = ['<br>',  '<tr',  '<td', '</p>', 'span>', 'li>', '</h', 'div>', '<em>', '</em>']
-        list2 = [chr(13), chr(13), chr(9), chr(13), chr(13),  chr(13), chr(13), chr(13), chr(13), chr(13)]
-        bolFlag1 = True
-        bolFlag2 = True
-        strReturn = ""
-        for int1 in range(len(str1)):
-          str2 = str1[int1]
-          for int2 in range(len(list1)):
-            if str1[int1:int1+len(list1[int2])].lower() == list1[int2]:
-               strReturn = strReturn + list2[int2]
-            if str1[int1:int1+7].lower() == '<script' or str1[int1:int1+9].lower() == '<noscript':
-               bolFlag1 = False
-            if str1[int1:int1+6].lower() == '<style':
-               bolFlag1 = False
-            if str1[int1:int1+7].lower() == '</style':
-               bolFlag1 = True
-            if str1[int1:int1+9].lower() == '</script>' or str1[int1:int1+11].lower() == '</noscript>':
-               bolFlag1 = True
-            if str2 == '<':
-               bolFlag2 = False
-            if bolFlag1 and bolFlag2 and (ord(str2) != 10) :
-              strReturn = strReturn + str2
-            if str2 == '>':
-               bolFlag2 = True
-            if bolFlag1 and bolFlag2:
-              strReturn = strReturn.replace(chr(32)+chr(13), chr(13))
-              strReturn = strReturn.replace(chr(9)+chr(13), chr(13))
-              strReturn = strReturn.replace(chr(13)+chr(32), chr(13))
-              strReturn = strReturn.replace(chr(13)+chr(9), chr(13))
-              strReturn = strReturn.replace(chr(13)+chr(13), chr(13))
-        strReturn = strReturn.replace(chr(13), chr(32))
-        return strReturn
-
-    def multiple_replace(dict, text):
-        regex = re.compile("(%s)" % "|".join(map(re.escape, dict.keys())))
-        return regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], text)
 
     def catFacts():
         url = "http://catfacts-api.appspot.com/api/facts?number=1"
         response = urllib2.urlopen(url)
         data = dict(json.loads(response.read()))
-        catfact = data['facts']
-        temp = str(catfact)
-        replace = {"'" : "\'","[u" : "","]" : ""}
-        webtext = multiple_replace(replace, temp)
-        catFacts = str(webtext)
+        response = str(data['facts'])
+        catFacts = response.replace("'","").replace("[u","").replace("]","")
         return catFacts
 
-    def cnnNews(flag):
-        url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://rss.cnn.com/rss/cnn_topstories.rss"
-        response = urllib2.urlopen(url)
-        data = dict(json.loads(response.read()))
-        newsreports = data['responseData']['feed']['entries']
-        titles = []
-        for site in newsreports:
-            titles.append(site['title'])
-        print(flag)
-        if flag == "random":
-            response = titles[random.randint(0,8)]
-            response = response.replace("‘","").replace("’","").replace("`","")
-            cnnNews = "I saw on the news: " + response
-        else:
-            newsreport = ".<break time='1s'/>  ".join(titles)
-            cnnNews = "Here are the top stories from CNN. " + newsreport
-        return cnnNews
-
-    def currentWeather():
-        url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D12795652&format=json"
-        response = urllib2.urlopen(url)
-        data = dict(json.loads(response.read()))
-        title = data['query']['results']['channel']['item']['title']
-        temp = data['query']['results']['channel']['item']['condition']['temp']
-        status = data['query']['results']['channel']['item']['condition']['text']
-        humidity = data['query']['results']['channel']['atmosphere']['humidity']
-        temppressure = data['query']['results']['channel']['atmosphere']['pressure']
-        rising = data['query']['results']['channel']['atmosphere']['rising']
-        dp =float(temppressure)
-        pressure = str(round((dp*0.0295301),2))
-        if rising == 1:
-            rising = "Rising"
-        elif rising == 2:
-            rising = "Falling"
-        else:
-            rising = "Steady"
-        wind = data['query']['results']['channel']['wind']['speed']
-        winddirection = data['query']['results']['channel']['wind']['direction']
-        dw = int(winddirection)
-        directionnumber = round(((dw-11.25)/22.5),0)
-        convertnumber=['North','North northeast','Northeast','East northeast','East','East southeast','Southeast','South southeast','South','South southwest','Southwest','West southwest','West','West northwest','Northwest','North northwest']
-        dn = int(directionnumber)
-        directionstring = str(convertnumber[dn])
-        forecast = data['query']['results']['channel']['item']['forecast']
-        day0all = forecast[0]
-        day0data = ". Today it will be " + day0all['text'] + " and " + day0all['high'] + " degrees. "
-        currentWeather = title + ". It is " + status + ". The temperature is " + temp + " degrees. Wind Speed is " + wind + " miles per hour, the direction is " + directionstring + ". The humidity is " + humidity + " percent. " + " The pressure is " + pressure + " millibars and is " + rising + day0data
-        return currentWeather
 
     def definition(query):
         url = "http://chriscargile.com/dictionary/json/"+query
@@ -182,6 +144,7 @@
             definition = "Sorry the word " + query + " was not found in dictionary"
         return definition
 
+
     def duckDuck(query):
         try:
           answer=duckduckgo.get_zci(query,safesearch=False)
@@ -192,39 +155,99 @@
         if("..." in answer):
             answer = answer + "wait! Are you testing me?!?!"
         if('http' in answer):
-            answer = "Sorry all I could get was a link for your request"
+            answer = "Sorry all I could get was a link for your request. Do you want to try something else?"
         else:
-            answer = "Here is the answer " + answer
+            answer = answer + "  <break time='500ms'/> I hope that answered your question."
         return answer
 
-    def exchangeRate():
+
+    def earthQuake(type):
+        if type == "local":
+            url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
+            response = urllib2.urlopen(url)
+            cr = csv.reader(response)
+            row=[]
+            for row in cr:
+                if cr.line_num == 1:
+                    lat = row[1]
+                    lon = row[2]
+            url = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&latitude="+lat+"&longitude="+lon+"&maxradiuskm=50"
+        else:
+            url = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&minmagnitude=6"
+        earthquakes = []
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        for event in data['features'][0:5]:
+            mag = event['properties']['mag']
+            place = event['properties']['place']
+            time = event['properties']['time']
+            date = datetime.datetime.fromtimestamp(time/1000.0).strftime('%B %d at %I:%M %p')
+            eventSum = "A "+str(mag)+" magnitude earthquake occured "+str(place)+" on "+str(date)
+            earthquakes.append(eventSum)
+        earthQuake = " <break time='500ms'/>  ".join(earthquakes)
+        return earthQuake
+
+
+    def exchangeRate(amt):
         url = "http://api.fixer.io/latest?base=USD&symbols=JPY"
         response = urllib2.urlopen(url)
         rates = dict(json.loads(response.read()))
         exchangeRate = rates["rates"]["JPY"]
-        exchangeRate = "Today 1 dollar equals " + str(exchangeRate) + " yen."
+        if int(amt) > 10:
+            dollarRate = int(amt)/exchangeRate
+            dollarRate = round(dollarRate,2)
+            exchangeRate = str(amt) +  " yen equals " + str(dollarRate) + " dollars."
+        else:
+            exchangeRate = "Today 1 dollar equals " + str(exchangeRate) + " yen."
         return exchangeRate
 
-    def myLA(flag):
-        url = "http://mynewsla.com/feed/"
-        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
-        xml = urllib2.urlopen(req).read()
-        tree = ElementTree.fromstring(xml)
-        data=[]
-        for item in tree.findall('.//item'):
-            for title in item.findall('.//title'):
-                titleOutput = title.text
-            result = (titleOutput)
-            data.append(result)
-        if flag == "random":
-            response = data[random.randint(0,8)]
-            response = response.replace("‘","").replace("’","").replace("`","")
-            myLA = "I read about this in Los Angeles: " + response
-        else:
-            response = " <break time='1s'/> ".join(data)
-            response = response.replace("‘","").replace("’","").replace("`","")
-            myLA = "Here are your local news " + response
-        return myLA
+
+    def imponderables():
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/imponderables.txt"
+        response = urllib2.urlopen(url).read()
+        text = eval(response)
+        imponderables = str(text[random.randint(0,98)])
+        return imponderables
+
+
+    def inspireMe():
+        url = "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        text = data['quoteText']
+        inspireMe = re.sub( '\s+', ' ', text ).strip()
+        inspireMe = inspireMe + " <break time='1s'/> "
+        return inspireMe
+
+
+    def moonInfo():
+        url = "http://api.burningsoul.in/moon"
+        response = urllib2.urlopen(url)
+        data = dict(json.loads(response.read()))
+        moonphase = data['stage']
+        moonillumination = data['illumination']
+        moonillumination = str(moonillumination)
+        illumationpercent,splitB = moonillumination.split(".")
+        fullmoon = data['FM']['UT']
+        newmoon = data['NNM']['UT']
+        fmDate = datetime.datetime.fromtimestamp(fullmoon).strftime('%B %d %Y')
+        nmDate = datetime.datetime.fromtimestamp(newmoon).strftime('%B %d %Y')
+        moonInfo = "The current phase is " + moonphase + ". Illumination is at " + illumationpercent + " percent. Full moon will occur on " + fmDate + " New moon will occur on " + nmDate
+        return moonInfo
+
+
+    def obliqueStrategies():
+        number = random.randint(1,4)
+        url = "http://brianeno.needsyourhelp.org/edition/"+str(number)+"/draw"
+        response = urllib2.urlopen(url)
+        try:
+            info = dict(json.loads(response.read()))
+            obliqueStrategies = info["strategy"]
+            obliqueStrategies = obliqueStrategies.replace(" & "," and ")
+        except:
+            obliqueStrategies = "We either make ourselves miserable, or we make ourselves happy. The amount of work is the same."
+        return obliqueStrategies
+
 
     def omdb(name):
         name=name.replace(" ","%20")
@@ -234,70 +257,90 @@
         if data['Response'] == "True":
             plot = data['Plot']
             name=name.replace("%20"," ")
-            ombd = "I liked the story of " +name+ " " +plot
+            ombd = "Here is the plot for " +name+ " " +plot
         else:
             name=name.replace("%20"," ")
             ombd = name + " was pretty cool."
         return ombd
 
-    def quoteRandom():
+
+    def randomFacts():
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/facts.txt"
+        response = urllib2.urlopen(url).read()
+        text = eval(response)
+        randomFacts = str(text[random.randint(0,63)])
+        return randomFacts
+
+
+    def randomJoke():
+        i = random.randint(0,9)
+        if i < 5:
+            url = "http://api.icndb.com/jokes/random"
+            response = urllib2.urlopen(url)
+            data = dict(json.loads(response.read()))
+            randomJoke = data['value']['joke']
+        else:
+            url = "http://tambal.azurewebsites.net/joke/random"
+            response = urllib2.urlopen(url)
+            data = dict(json.loads(response.read()))
+            randomJoke = data['joke']
+        return randomJoke
+
+
+    def randomQuote():
         randomwords = ['positive', 'funny', 'inspiration', 'nature', 'courage', 'laugh', 'tech', 'exercise', 'health', 'fitness', 'laughter', 'silly', 'sunny', 'happy', 'cheerful', 'animals', 'friendship', 'success', 'patience', 'love', 'peace']
         randomstring = str(randomwords[random.randint(0,20)])
-        url = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=1&q=https://www.quotesdaddy.com/feed/tagged/"+randomstring
-        response = urllib2.urlopen(url)
-        data = dict(json.loads(response.read()))
-        RandomQuote = data['responseData']['feed']['entries']
-        titles = []
-        for site in RandomQuote:
-            titles.append(site['title'])
-        quoterandom = '. '.join(titles)
-        quote = quoterandom
-        return quote
-
-    def reddit():
-        url = "http://www.reddit.com/r/todayilearned/new/.json?limit=1"
-        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
-        response = urllib2.urlopen(req)
-        data = dict(json.loads(response.read()))
-        getData = data["data"]["children"][0]["data"]["title"]
-        reddit = getData.replace("TIL ","")
-        return reddit
-
-    def scienceNews():
-        url = "https://rss.sciencedaily.com/top.xml"
-        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
+        url = "https://www.quotesdaddy.com/feed/tagged/"+randomstring
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
         xml = urllib2.urlopen(req).read()
         tree = ElementTree.fromstring(xml)
-        data=[]
         for item in tree.findall('.//item'):
-            for description in item.findall('.//description'):
-                response = description.text
-                response = response.replace("‘","").replace("’","").replace("`","")
-            result = (response)
-            data.append(result)
-        randScience = str(data[random.randint(0,30)])
-        scienceNews = randScience
-        return scienceNews
+            for title in item.findall('.//title'):
+                quote = title.text
+        randomQuote = "Here is one based on " +randomstring+ " <break time='500ms'/>  " + quote + " <break time='1s'/> "
+        return randomQuote
+
+
+    def randomRiddle():
+        uid   = rs.current_user()
+        var = "riddle"
+        var1 = "answer"
+        url = urllib2.urlopen('https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/riddles.json')
+        json_string = url.read()
+        parsed_json = json.loads(json_string)
+        num = random.randint(0,108)
+        riddle = parsed_json[num]['q']
+        answer = parsed_json[num]['a']
+        answer = answer.lower()
+        rs.set_uservar(uid, var, riddle)
+        rs.set_uservar(uid, var1, answer)
+        return
+
+
+    def rhymeBrain(word):
+        url = "http://rhymebrain.com/talk?function=getRhymes&word="+word
+        response = urllib2.urlopen(url)
+        data = json.loads(response.read())
+        i = 0
+        rhymes =[]
+        for i in xrange(0, 9):
+            words = data[i]['word']
+            rhymes.append(words)
+
+        rhymeBrain=", ".join(rhymes)
+        return rhymeBrain
+
 
     def spaceLaunch():
-        url = "https://launchlibrary.net/1.2/launch/next/5"
+        url = "https://launchlibrary.net/1.2/launch/next/1"
         response = urllib2.urlopen(url)
         data = dict(json.loads(response.read()))
-        launchInfo = ""
-        num=0
-        for item in data:
-            abbrev = data['launches'][num]['location']['pads'][0]['agencies'][0]['abbrev']
-            if abbrev == "NASA":
-                date = data['launches'][num]['net']
-                description = data['launches'][num]['missions'][0]['description']
-                spaceLaunch = "Here is the next launch info " + description + " It is scheduled for " + date
-            else:
-                num=num+1
-        if launchInfo == "":
-            date = data['launches'][0]['net']
-            description = data['launches'][0]['missions'][0]['description']
-            spaceLaunch = "I love space launches, here is the next one. " + description + " It is scheduled for " + date
+        date = data['launches'][0]['net']
+        description = data['launches'][0]['missions'][0]['description']
+        description = description.replace(" & "," and ")
+        spaceLaunch = description + " It is scheduled for " + date
         return spaceLaunch
+
 
     def spacePeople():
         url = "http://api.open-notify.org/astros.json"
@@ -307,84 +350,89 @@
         spacePeople = "Currently there are " + str(numberSpace) + " persons in space."
         return spacePeople
 
-    def sunRiseSet():
-        url = "https://query.yahooapis.com/v1/public/yql?q=select%20astronomy%20from%20weather.forecast%20where%20woeid%3D12795729&format=json&diagnostics=true&callback="
-        response = urllib2.urlopen(url)
-        data = dict(json.loads(response.read()))
 
-        sunrise = data['query']['results']['channel']['astronomy']['sunrise']
-        sunset = data['query']['results']['channel']['astronomy']['sunset']
-
-        riseA,riseB = sunrise.split(":")
-        setA,setB = sunset.split(":")
-
-        if len(setB) == 4:
-            timesunset = setA + ":" + "0" + setB
-        else:
-            timesunset = sunset
-
-        if len(riseB) == 4:
-            timesunrise = riseA + ":" + "0" + riseB
-        else:
-            timesunrise = sunrise
-        sunRiseSet = "Sunrise is at " + timesunrise + ". Sunset is at " + timesunset
-        return sunRiseSet
-
-    def toDo():
-        url = 'https://raw.githubusercontent.com/ekt1701/Alexa-Good-Morning/master/todo.csv'
+    def stockReport():
+        url = "https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv"
         response = urllib2.urlopen(url)
         cr = csv.reader(response)
-        for todayrow in cr:
-            toDo = str(todayrow)
-        return toDo
+        for data in cr:
+            if cr.line_num == 5:
+                stocklist = data
+            if cr.line_num == 6:
+                names = data
+        index = 1
+        myreport = []
+        while index<len(stocklist):
+            url = "http://www.nasdaq.com/aspxcontent/NasdaqRSS.aspx?data=quotes&symbol="+stocklist[index]
+            req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+            xml = urllib2.urlopen(req).read()
+            getData = []
+            getStock = minidom.parseString(xml).getElementsByTagName('item')
+            for item in getStock:
+                getData = item.getElementsByTagName('description')[0].firstChild.wholeText
+            getData = getData.split()
+            price = getData[24].replace('width="50%">','')
+            change = getData[37].replace('color="green">','').replace('<img','').replace('color="red">','')
+            amount = getData[39].replace('>','').replace('</font&nbsp;','')
+            stockreport = "The price for " + names[index] + " is " + price + " the change is " + change + amount
+            myreport.append(stockreport)
+            index += 1
+        stockReport = '. '.join(myreport)
+        return stockReport
 
-    def wordDay():
-        url = "https://wordsmith.org/awad/rss1.xml"
-        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
-        xml = urllib2.urlopen(req).read()
-        tree = ElementTree.fromstring(xml)
-        for item in tree.findall('.//item'):
-            for title in item.findall('.//title'):
-                title = title.text
-            for description in item.findall('.//description'):
-                description = description.text
-            wordDay = ("Today's word is " + title + ". It means " + description)
-        return wordDay
+    def wikiPedia(query):
+        try:
+            text = str(wikipedia.summary(query))
+            text = text.replace("&"," and ").replace(" & "," and ")
+            wikiPedia = re.sub( '\s+', ' ', text ).strip()
+        except wikipedia.exceptions.DisambiguationError as e:
+            errorMes = e.options
+            error = ', '.join(errorMes)
+            wikiPedia = "There was an error, which one do you want: " + error
+        except:
+            wikiPedia = "I'm sorry there was an error with your request for " + query + "What else shall we try?"
+        return wikiPedia
+
 
 
     if parts[0] == "catFacts":
         results = catFacts()
-    elif parts[0] == "cnnNews":
-        results = cnnNews(" ".join(parts[1:]))
-    elif parts[0] == "currentWeather":
-        results = currentWeather()
     elif parts[0] == "definition":
         results = definition(" ".join(parts[1:]))
     elif parts[0] == "duckDuck":
         results = duckDuck(" ".join(parts[1:]))
     elif parts[0] == "exchangeRate":
-        results = exchangeRate()
-    elif parts[0] == "myLA":
-        results = myLA(" ".join(parts[1:]))
+        results = exchangeRate(" ".join(parts[1:]))
+    elif parts[0] == "earthQuake":
+        results = earthQuake(" ".join(parts[1:]))
+    elif parts[0] == "imponderables":
+        results = imponderables()
+    elif parts[0] == "inspireMe":
+        results = inspireMe()
+    elif parts[0] == "moonInfo":
+        results = moonInfo()
+    elif parts[0] == "obliqueStrategies":
+        results = obliqueStrategies()
     elif parts[0] == "omdb":
         results = omdb(" ".join(parts[1:]))
-    elif parts[0] == "quoteRandom":
-        results = quoteRandom()
-    elif parts[0] == "reddit":
-        results = reddit()
-    elif parts[0] == "scienceNews":
-        results = scienceNews()
+    elif parts[0] == "randomFacts":
+        results = randomFacts()
+    elif parts[0] == "randomJoke":
+        results = randomJoke()
+    elif parts[0] == "randomQuote":
+        results = randomQuote()
+    elif parts[0] == "randomRiddle":
+        results = randomRiddle()
+    elif parts[0] == "rhymeBrain":
+        results = rhymeBrain(" ".join(parts[1:]))
     elif parts[0] == "spaceLaunch":
         results = spaceLaunch()
     elif parts[0] == "spacePeople":
         results = spacePeople()
-    elif parts[0] == "toDo":
-        results = toDo()
-    elif parts[0] == "sunRiseSet":
-        results = sunRiseSet()
-    elif parts[0] == "wordDay":
-        results = wordDay()
-
+    elif parts[0] == "stockReport":
+        results = stockReport()
+    elif parts[0] == "wikiPedia":
+        results = wikiPedia(" ".join(parts[1:]))
 
     return results
 < object

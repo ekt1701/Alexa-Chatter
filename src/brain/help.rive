@@ -1,0 +1,22 @@
+// Commands available
+
++ (help|help me|what can I say)
+- Say Help news. Help personal. Help search. Help weather. Help games. Help other. These will give you the basic things you can say.
+
++ help news
+- To get news from Bing say, search bing news for. For other news sources say, headline or national news, Wall Street, New York Times, Reuters, reddit news, science news, space news, sports news, tech news, hacker news, crunch gear, gadget flow. For google alerts say, alert echo, alert chat, alert home
+
++ help personal
+- You can say, My To Do, My Calendar, to hear your to do list or events on your calendar. My checklist for things to do before leaving. You can also say, Good Morning, Get My News, Get My Alerts.
+
++ help search
+- To use Duck Duck Go say. Search Duck Duck for. To use Wikipedia say. Search Wikipedia, or tell me about. To use Wolf Ram Alpha say. Search Wolf Ram for, or Get answer for. To get information from Open Movie Database say. Find the movie or show. To get synonyms say. Another word for. To get rhyming words say. What rhymes with.
+
++ help weather
+- You can say. Temperature. Humidity. Sunrise or Sunset. My weather. My forecast. Will it Rain? Full weather report. What is the weather in.  What is the air quality.
+
++ help (game|games)
+- To play an adventure game, say, Play game.  For madlibs, say, Word game or madlibs. You can also say, Memory game or Math game. These are simple proof of concept games written in Rivescript
+
++ help other
+- You can say. How is my traffic? Get directions. Check radar. Word or Quote or History of the day. Tell me a joke or riddle. Random quote or fact. Motivate me. Oblique Strategies. Make me think. And of course, cat facts.

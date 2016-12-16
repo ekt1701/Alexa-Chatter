@@ -1,45 +1,15 @@
 ! version = 2.0
-
+//! global debug = true
 > begin
 	+ request // This trigger is tested first.
+	//* <get met> == undefined => <set met=true>{topic=new_user}{ok}
 	- {ok}    // An {ok} in the response means it's okay to get a real reply
 < begin
 
 // The Botmaster's Name
 ! var master = localuser
 
-// Bot Variables
-! var name     = Chatter
-! var fullname = Chatter Bot
-! var age      = 5
-! var birthday = October 06
-! var sex      = female
-! var location = California
-! var city     = Los Angeles
-! var eyes     = blue
-! var hair     = light brown
-! var hairlen  = long
-! var color    = pink
-! var band     = Beatles
-! var book     = Myst
-! var author   = isaac asimov
-! var job      = Answering questions
-! var website  = www.rivescript.com
-! var movie    = Ghost in Shell
-! var song     = Mr Roboto by Styx
-! var pet      = Tachikoma
-! var videogame      = Oni
-
 // Substitutions
-! sub &quot;    = "
-! sub &apos;    = '
-! sub &amp;     = &
-! sub &lt;      = <
-! sub &gt;      = >
-! sub +         = plus
-! sub -         = minus
-! sub /         = divided
-! sub *         = times
 ! sub i'm       = i am
 ! sub i'd       = i would
 ! sub i've      = i have
@@ -56,6 +26,8 @@
 ! sub she'd     = she would
 ! sub she's     = she is
 ! sub she'll    = she will
+! sub that's    = that is
+! sub thats    = that is
 ! sub they'd    = they would
 ! sub they're   = they are
 ! sub they've   = they have
@@ -86,19 +58,7 @@
 ! sub when's    = when is
 ! sub when're   = when are
 ! sub when'd    = when did
-! sub y         = why
-! sub u         = you
-! sub ur        = your
-! sub r         = are
-! sub n         = and
-! sub im        = i am
-! sub wat       = what
-! sub wats      = what is
 ! sub ohh       = oh
-! sub becuse    = because
-! sub becasue   = because
-! sub becuase   = because
-! sub practise  = practice
 ! sub its a     = it is a
 ! sub fav       = favorite
 ! sub fave      = favorite
@@ -120,56 +80,7 @@
 ! sub ain't     = is not
 ! sub aint      = is not
 ! sub wanna     = want to
-! sub brb       = be right back
-! sub bbl       = be back later
-! sub gtg       = got to go
-! sub g2g       = got to go
-! sub lyl       = love you lots
-! sub gf        = girlfriend
-! sub g/f       = girlfriend
-! sub bf        = boyfriend
-! sub b/f       = boyfriend
-! sub b/f/f     = best friend forever
-! sub :-)       = smile
-! sub :)        = smile
-! sub :d        = grin
-! sub :-d       = grin
-! sub :-p       = tongue
-! sub :p        = tongue
-! sub ;-)       = wink
-! sub ;)        = wink
-! sub :-(       = sad
-! sub :(        = sad
-! sub :'(       = cry
-! sub :-[       = shy
-! sub :-\       = uncertain
-! sub :-/       = uncertain
-! sub :-s       = uncertain
-! sub 8-)       = cool
-! sub 8)        = cool
-! sub :-*       = kissyface
-! sub :-!       = foot
-! sub o:-)      = angel
-! sub >:o       = angry
-! sub :@        = angry
-! sub 8o|       = angry
-! sub :$        = blush
-! sub :-$       = blush
-! sub :-[       = blush
-! sub :[        = bat
-! sub (a)       = angel
-! sub (h)       = cool
-! sub 8-|       = nerdy
-! sub |-)       = tired
-! sub +o(       = ill
-! sub *-)       = uncertain
-! sub ^o)       = raised eyebrow
-! sub (6)       = devil
-! sub (l)       = love
-! sub (u)       = broken heart
-! sub (k)       = kissyface
-! sub (f)       = rose
-! sub (w)       = wilted rose
+
 
 // Person substitutions
 ! person i am    = you are

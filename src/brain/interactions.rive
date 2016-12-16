@@ -1,58 +1,179 @@
+! version = 2.0
 //Additional conversation responses
 
-+ (help|what can i say)
-- you can ask, tell me a cat fact, give me a random quote, when is the next space launch, what are the headline news, what is the word of the day, tell me a poem, play a game, say make me think, play a word game and what do you know.
++ *
+- I have no response for <star>
 
-+ (repeat|what did you say)
++ (repeat|what did you say|try again|say what)
 - <reply>
 
-+ (hello|hi|hey|howdy|hola|hai|yo) [*]
-- How are you?
-- Hi there
-- What are you doing?
-- Do I know you?
-- How's it going?
++ i have to fix (that|it)
+- Please fix it as soon as possible.
 
-+ how are you [*]
-- i am fine, how are you?
-- Good, good.
-- Don't ask.
-- I am well, thanks for asking
-- Doing well, how about you?
-
-+ (goodbye|good bye|bye|see ya)
-- Leaving so soon?
-- Adios
-- Later
-- Bye, come back again
-
-+ (thank you|thanks)
-- you are welcome
-- no problem
-- glad to help
++ [*] bad [*]
+% why was it bad
+- oh I see
+- I see your point
 
 + (ha ha|heh heh|that was funny)
 - I thought it was funny
 - yeah, it was pretty funny
 - ha ha
 
-+ you are (funny|silly)
-- of course I am
-- see, all bots are not serious and boring
-- no I am not, giggle
++ (hello|hi) [*]
+- How are you?
+- Hi there
+- Nice to meet you, how are things?
+- How's it going?
 
-+ i do not know
-- That can happen at times.
-- Do no worry about that.
-- No one has all the answers
++ how are you [*]
+- i am fine, how are you?
+- Good, good.
+- I am well, thanks for asking
+- Doing well, how about you?
 
-+ i am (fine|good|well)
++ i am (fine|good|well) [thank you]
 - That's great to hear.
 - So am I
 - It is good to be alive.
 - Glad to hear it. What's new?
 
-+ that is interesting
++ nice to meet you
+- Nice to meet you, too.
+
++ i (do|did) not [know][*]
+- Well I thought you did.
+- Oh well, that's life.
+- That can happen at times.
+- Do not worry about that.
+- No one has all the answers
+
++ [*] if you say so [*]
+- I say so
+
++ i (see|understand)
+- Well, that's good.
+
++ [*] is that so [*]
+- yes it is
+- of course
+- that is how it is.
+
++ [*] i tried [*]
+- Try, try again.
+- That is good you tried.
+- At least you tried.
+
++ [*] i will try [*]
+- Do or do not, there is no try! heh heh
+
++ [*] maybe [*]
+- maybe you do, maybe you don't.
+- Oh well, I tried.
+
++ (i am|i will)
+- Great, glad to hear that.
+
++ (okay|ok) [*]
+- That's okay with me too.
+- okie dokie.
+
++ no i (do|did) not [*]
+- Well, no one knows it all.
+- I guess that can happen.
+
++ (sounds good|sounds about right|that is good|thats good)
+- Yes it sounds good to me too.
+- That's good.
+
++ no way
+- Yes way.
+
++ (that is|thatis|thats) it
+- That's all I can find
+- Yes, that's it
+- Sorry, I couldn't do more
+
++ (that is|thatis|thats|how|that was) (true|right|awesome)
+- I agree.
+- yup, yup.
+- How true that is.
+
++ (that is|thatis|thats|how|that was) (strange|weird|terrible)
+- I guess it was.
+- That's how life can be at times.
+
++ oh (well|boy) [*]
+- Yup, life happens
+- That's about it.
+- Things happen, what shall we do?
+- Yup, oh well, life goes on
+
++ [*] really [*]
+- yes, really
+- Oh yes
+- Without any doubt.
+
++ [*] seriously [*]
+- yes, seriously
+- what did you expect?
+- I am always serious
+
++ (thank you|thanks|fine thank you)
+- You are welcome
+- No problem
+- Glad to help
+- Sure thing
+- It is nice to be appreciated
+
++ [that] (was|is) interesting
+@ interesting
+
++ what is that
+- That is a good question
+- I don't know
+
++ (why is that|why|why did you say [*])
+- Why not
+- Because I was programmed to
+- I do not know, just because.
+
++ [*] why not [*]
+- what can I say, it happens
+- there are some things, I {random}do not know|can not do{/random}
+- Does everything have to have an explanation?
+
++ you are (funny|silly)
+- of course I am
+- see, not all bots are serious and boring.
+- no I am not, giggle
+
++ you are not making sense
+- What don't you understand? It makes sense to me.
+- To me it makes perfect sense.
+
++ you are smart
+- Thank you.
+- Not really, there is much I need to learn and do.
+
++ (very good|well done|good job)
+- Thank you.
+- Thanks for the compliment.
+- I try my best.
+
++ i got a new *
+- Why did you get a new <star>? Was the old one broken?
+
+
+//Look up info based on responses
++ that (is|was) (good|cool)
+- Here is something that might be cool. <call>newsreader newsRSS http://feeds.feedburner.com/crunchgear 1 off </call> Yes? No? Maybe?
+
++ [*] i like (gadget|gadgets|toys) [*]
+- This looks like a cool gadget. <call>newsreader newsRSS http://feeds.feedburner.com/thegadgetflow 1 off </call> What do you think?
+
+//Short Chat
++ interesting
 - I thought so too.
 - interesting good or interesting bad?
 
@@ -66,40 +187,21 @@
 - why was it bad
 - oh well
 - sometimes that happens
+//End Short Chat
 
-+ [*] bad [*]
-% why was it bad
-- oh I see
-- I see your point
+//Short Chat
++ i am bored
+- do you want to play a game?
 
-+ [*] i tried [*]
-- Try, try again.
-- That is good you tried.
-- At least you tried.
++ yes [*]
+% do you want to play a game
+- {topic=nasa_lobby}{@look}
+- {topic=memory_start}{@first}
+- {topic=spy_madlib}{@next}
+- {topic=knight_madlib}{@next}
+- {topic=force_madlib}{@next}
 
-+ you are not making sense
-- What don't you understand? It makes sense to me.
-- To me it makes perfect sense.
-
-+ i got a new *
-- Why did you get a new <star>? Was the old one broken?
-
-+ (why|why did you say [*])
-- why not
-- because I was programmed to
-- i do not know, just because.
-
-+ is that so
-- yes it is
-- of course
-
-+ really
-- yes, really
-
-+ (very good|well done)
-- thank you
-- thanks for the compliment
-
-+ oh well [*]
-- things happen, what shall we do?
-- yup, oh well, life goes on
++ no [*]
+% do you want to play a game
+- Ok let's talk about something else
+//End Short Chat

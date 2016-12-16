@@ -1,0 +1,216 @@
+! version = 2.0
+// News reader for rss/xml feeds, google alerts and reddit subtopics.
+
+//Daily RSS feeds
++ [*] quote of [the] day [*]
+- Here is a quote of the Day from BrainyQuote.com. <call>newsreader newsRSS http://feeds.feedburner.com/brainyquote/QUOTEBR 1 on </call> Did you like that quote?
+- Here is a motivating quote from The Quotations Page. <call>newsreader newsRSS http://feeds.feedburner.com/quotationspage/mqotd 1 on </call> Did that motivate you?
+
++ [*] (day [in] history|history of [the] day) [*]
+- This day is from history.com. <call>newsreader newsRSS http://www.history.com/this-day-in-history/rss 1 on </call> Now you are a history buff.
+
++ [*] (happened|occurred) on (this day|this date|today) [*]
+- <call>newsreader newsRSS http://feeds.feedburner.com/historicalevents?format=xml 1 on </call> Now you are a history buff.
+
++ [*] word of [the] day [*]
+- Contacting wordthink.com, here is the word. <call>newsreader newsRSS http://feeds.feedburner.com/wordthink/vIYJ?format=xml 1 on </call>  Each day you are learning a new word.
+
+
+//Search for articles from Bing news, gets the top 5 news articles.
++ [*] search [bing] news [for] *
+- Checking with Bing.com, here are the latest news for <star>: <call>newsreader bingNews <star></call> What else shall we do?
+
+
+// RSS/XML Feeds
+// Format: URL of feed, # of articles to retrieve, on - includes description of article
+
++ [*] (headline|national|cnn) news [*]
+- Here are the headlines from CNN news. <call>newsreader newsRSS http://rss.cnn.com/rss/cnn_topstories.rss 5 on </call> That was the latest headline news.
+
++ [*] reuters [news] [*]
+- Getting the news from Reuters. <call>newsreader newsRSS http://feeds.reuters.com/Reuters/worldNews 5 on </call> That was the latest world news from Reuters.
+
++ [*] wall street [journal] [news] [*]
+- Getting the news from Wall Street Journal. <call>newsreader newsRSS http://www.wsj.com/xml/rss/3_7014.xml 5 on </call> That was the latest business news.
+
++ [*] new york times [news] [*]
+- Getting the news from the New York Times. <call>newsreader newsRSS http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml 5 on </call> Those were the news from the homepage of the New York Times.
+
++ [*] science news [*]
+- Here are the latest articles from Science Daily. <call>newsreader newsRSS https://rss.sciencedaily.com/top.xml 5 on </call>  You are now updated in the world of science.
+
++ [*] space news [*]
+- Getting NASA's breaking news. <call>newsreader newsRSS https://www.nasa.gov/rss/dyn/breaking_news.rss 5 on </call> Now you know the latest from NASA.
+
++ [*] tech news [*]
+- Got your news from Techmeme. <call>newsreader newsRSS http://www.techmeme.com/feed.xml 5 on </call> The tech industry keeps moving forward.
+
++ [*] (cnet|c net|see net) news [*]
+- Getting the top technology news from CNET. <call>newsreader newsRSS https://www.cnet.com/rss/news/ 5 on </call> CNET has some cool tech news.
+
++ [*] crunch gear [*]
+- Got some news from Crunch Gear. <call>newsreader newsRSS http://feeds.feedburner.com/crunchgear 5 on </call> Those were some cool gadgets news.
+
++ [*] gadget flow [*]
+- Found some cool gadgets from Gadget Flow. <call>newsreader newsRSS http://feeds.feedburner.com/thegadgetflow 5 on </call>. Was there anything you liked?
+
++ [*] hacker news [*]
+- Getting the articles from hacker news. <call>newsreader newsRSS https://news.ycombinator.com/rss 5 off </call>. Those were the articles for the intellectually curious.
+
++ [*] (sports|sport) news [*]
+- Checking with fox sport digital. <call>newsreader newsRSS http://api.foxsports.com/v1/rss?partnerKey=zBaFxRyGKCfxBagJG9b8pqLyndmvo7UU 5 on </call>. Are you ready to hit the field?
+
+
+// Google Alerts
+// Format: URL of feed, # of articles to retrieve
+
++ alert (echo|amazon echo)
+- Getting the latest alerts for Amazon Echo. <call>newsreader googleAlerts https://www.google.com/alerts/feeds/15961848413950729082/16871229037158962966 5 on </call> That was the latest news for Amazon Echo.
+
++ alert (home|google home)
+- Getting the latest alerts for Google Home. <call>newsreader googleAlerts https://www.google.com/alerts/feeds/15961848413950729082/621807172833270332 5 on </call> That was the latest news for Google Home.
+
++ alert (chat|bot|chatbot)
+- Getting the latest alerts for chat bots. <call>newsreader googleAlerts https://www.google.com/alerts/feeds/15961848413950729082/4557782760590498150 5 on </call> That was the latest news for chat bots.
+
+
+// Random Reddit articles
+// Format: Subreddit name, # of articles to retrieve
+
++ [*] (reddit|read it|read|ready|read the) news
+@ reddit
+
++ reddit
+- Here are some science news. <call>newsreader reddit science 5</call> . I'm always interested in science.
+- Here are some articles from the world of technology. <call>newsreader reddit technology 5</call>.  What else would you like to know?
+- I got some artificial intelligence news. <call>newsreader reddit artificial 5</call>. Will this make me smarter?
+- Here are some articles from Future Studies. <call>newsreader reddit Futurology 5</call>. Looks like some interesting stuff out there.
+- I found these articles about chatbots. <call>newsreader reddit chatbots 5</call>. Chatbots rule!
+- Space the final frontier news. <call>newsreader reddit space 5</call>. I like looking at the stars.
+
+
+> object newsreader python
+    import json
+    import re
+    import urllib2
+    from xml.etree import ElementTree
+    from bs4 import BeautifulSoup
+    import string
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
+    command = " ".join(args)
+    parts = command.split(" ")
+
+
+    def bingNews(request):
+        request = request.replace(" ","%20")
+        url = "https://www.bing.com/news/search?q="+request+"&format=RSS"
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+        xml = urllib2.urlopen(req).read()
+        tree = ElementTree.fromstring(xml)
+        data=[]
+        news=[]
+        for item in tree.findall('.//item'):
+            for description in item.findall('.//description'):
+                response = description.text
+                result = re.sub(r'<(.|\n)+?>', '', response)
+                result = result.replace("&"," and ").replace(" & "," and ")
+                result = ' '.join(result.split())
+            data.append(result)
+        for x in xrange(0,5):
+            result = data[x]
+            news.append(result)
+        response = " <break time='500ms'/> ".join(news)
+        bingNews = response + " <break time='1s'/> "
+        return bingNews
+
+
+    def googleAlerts(request):
+        parts = request.split(" ")
+        url = parts[0]
+        count = int(parts[1])+1
+        xml = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(xml,"lxml")
+        alerts = []
+        for title, content in zip(soup.findAll('title')[1:count], soup.findAll('content')):
+            result = str(title) + ": " + str(content)
+            alert = re.sub(r'<(.|\n)+?>', '', result)
+            alert = alert.replace('&lt;b&gt;', '').replace('&lt;/b&gt;', '').replace('&amp;#39;', '\'').replace('&amp;nbsp;...', ' ').replace('\xe2', '').replace('\x80', '').replace('\x93', '').replace('\x94', '').replace('&amp;amp;', '')
+            alerts.append(alert)
+        googleAlerts = " <break time='500ms'/> ".join(alerts)
+        return googleAlerts
+
+
+    def newsRSS(request):
+        parts = request.split(" ")
+        url = parts[0]
+        count = int(parts[1])
+        desc = parts[2]
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30"})
+        try:
+            xml = urllib2.urlopen(req).read()
+            tree = ElementTree.fromstring(xml)
+            data=[]
+            news=[]
+            for item in tree.findall('.//item'):
+                for title in item.findall('.//title'):
+                    headline = title.text
+                if desc == "on":
+                    for description in item.findall('.//description'):
+                        response = description.text
+                        result = re.sub(r'<(.|\n)+?>', '', response)
+                        result = re.sub("[\(\[].*?[\)\]]", "", result)
+                        result = result.replace("&#8217;","'").replace("&#8211;"," ").replace("&#8212;"," ").replace("[&#8230;]"," ").replace("&#8220;"," ").replace("&#8221;"," ").replace("&#8230;"," ").replace("&ldquo;"," ").replace(" & "," and ").replace("- CNET:","")
+                        result = result.replace("…"," ").replace("›"," ").replace("-"," ").replace("&hellip;"," ").replace("&nbsp;"," ").replace("&rsquo;","'").replace("&#39;","").replace("&raquo;","")
+                        result = result.replace("&mdash;"," ").replace("&rdquo;"," ").replace('&#38;', ' and ')
+                        result = ' '.join(result.split())
+                    data.append(headline + ": <break time='250ms'/> " +result)
+                else:
+                    data.append(headline)
+            for x in xrange(0,count):
+                result = data[x]
+                news.append(result)
+            news = " <break time='500ms'/> ".join(news)
+            newsRSS = news + " <break time='1s'/> "
+        except:
+            newsRSS = "I'm sorry, there was an error with the news feed."
+        return newsRSS
+
+
+    def reddit(request):
+        parts = request.split(" ")
+        source = parts[0]
+        count = parts[1]
+        url = "https://www.reddit.com/r/"+source+"/new/.json?limit="+count
+        req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36"})
+        response = urllib2.urlopen(req)
+        info = dict(json.loads(response.read()))
+        data = info["data"]["children"]
+        titles=[]
+        for title in data:
+            text = title["data"]["title"]
+            u = text.decode("utf-8")
+            getData = u.replace(u"\u2018", "").replace(u"\u2019", "")
+            titles.append(getData)
+        titles = " <break time='500ms'/> ".join(titles)
+        titles = titles + " <break time='1s'/> "
+        try:
+            reddit = titles
+        except:
+            reddit = "Sorry there was an error with the news feed. <break time='1s'/> "
+        return reddit
+
+    if parts[0] == "bingNews":
+        results = bingNews(" ".join(parts[1:]))
+    elif parts[0] == "googleAlerts":
+        results = googleAlerts(" ".join(parts[1:]))
+    elif parts[0] == "newsRSS":
+        results = newsRSS(" ".join(parts[1:]))
+    elif parts[0] == "reddit":
+        results = reddit(" ".join(parts[1:]))
+    return results
+
+
+< object
