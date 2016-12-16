@@ -1,5 +1,11 @@
 from __future__ import print_function
 from rivescript import RiveScript
+import time
+import datetime
+import urllib2
+import json
+import re
+import pytz
 
 
 rs = RiveScript()
@@ -66,7 +72,7 @@ def on_intent(intent_request, session):
     # Dispatch to your skill's intent handlers
     if intent_name == "ChatBotIntent":
         return getChatBot(intent, session)
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
+    elif intent_name == "AMAZON.StopIntent":
         return signoff()
     else:
         return getChatBot(intent, session)
@@ -85,13 +91,25 @@ def on_session_ended(session_ended_request, session):
 
 def get_welcome_response():
     session_attributes = {}
-    card_title = "Welcome to chat"
+    card_title = "Welcome to chatter"
     userData = ""
-    speech_output = "<speak>Hello, I'm Chatter, lets start chatting.</speak>"
+    dt = datetime.datetime.fromtimestamp(time.time(), pytz.utc)
+    tz = pytz.timezone('US/Pacific')
+    myTime = tz.normalize(dt.astimezone(tz)).strftime('%H/%M/%B/%A')
+    hour,minute,mth,nameDay = myTime.split("/")
+    now = int(hour)
+    if now < 7:
+        greetings = "Good morning, how can I help you?"
+    elif now > 18:
+        greetings = "Good evening, what can I do for you?"
+    else:
+        greetings = "Hello, how can I help you? "
+    speech_output = "<speak>" + greetings + "</speak>"
     reprompt_text = "<speak>Hello, are you there?</speak>"
     should_end_session = False
     session_attributes = {"speech_output": speech_output,"reprompt_text": reprompt_text,"userData": userData}
     return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+
 
 def getChatBot(intent, session):
     session_attributes = {}
@@ -100,15 +118,11 @@ def getChatBot(intent, session):
     userData = session['attributes']['userData']
     if userData:
         for key, value in userData[username].items():
-            if type(value) is str:
-                rs.set_uservar(username, key, value)
-            if key == "__history__":
-                rs.set_uservar(username, key, value)
-            if key == "__lastmatch__":
-                rs.set_uservar(username, key, value)
+            rs.set_uservar(username, key, value)
     message = intent['slots']['response'].get('value')
     reply = rs.reply("localuser", message)
     userData = rs.get_uservars();
+
     speech_output = "<speak>"+reply+"</speak>"
     reprompt_text = "<speak>I didn't hear that, please say again.</speak>"
     should_end_session = False
@@ -116,14 +130,37 @@ def getChatBot(intent, session):
     return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
 
+def inspireMe():
+    url = "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json"
+    response = urllib2.urlopen(url)
+    try:
+        data = dict(json.loads(response.read()))
+        inspireMe = data['quoteText']
+    except:
+        inspireMe = " Be kind to yourself."
+    return inspireMe
+
+
 def signoff():
     session_attributes = {}
     card_title = "Signing off"
-    speech_output = "<speak>It was fun chatting with you, please come back again.</speak>"
+    getTime = time.time()
+    dt = datetime.datetime.fromtimestamp(time.time(), pytz.utc)
+    tz = pytz.timezone('US/Pacific')
+    myTime = tz.normalize(dt.astimezone(tz)).strftime('%H/%M/%B/%A')
+    hour,minute,mth,nameDay = myTime.split("/")
+    now = int(hour)
+    inspire = inspireMe()
+    if now > 21:
+        goodbye = "Good night, sleep well <break time='1s'/> here's a final thought " + "<break time='1s'/>" + str(inspire)
+    else:
+        goodbye = "Take care, see you later, here's a final thought " + "<break time='1s'/>" + str(inspire)
+    speech_output = "<speak>"+goodbye+"</speak>"
     should_end_session = True
     reprompt_text = ""
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
+
 
 def handle_session_end_request():
     should_end_session = True
