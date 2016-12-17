@@ -80,13 +80,13 @@ To debug the interactions, if there is something Chatter does not understand, it
 
 All the code which runs Chatter is found in the brain directory.  You can easily change the wording of the commands, add other rss feeds or add functions.  With Rivescript, Chatter is easy to customize for your own use.
 
-Instructions:
+##Instructions:
 
-Copy the source_files.zip and upload to AWS Lambda. Note: I could not upload all the necessary files into the src directory, I kept getting an error,that is why I included the zip file.
+Copy the source_files.zip and upload to AWS Lambda. Note: I could not upload all the necessary files into the src directory, I kept getting an error, that is why I included the zip file.
 
 The configuration is Runtime: Python 2.7, Handler: index.lambda_handler, Existing Role: lambda_basic_execution. In the Advanced settings, set the timeout to 50 seconds.
 
-In the Amazon Developer Console, use the files from the speechAssets folder and make a custom slot named CHATTER and fill the slots with random words and phrases.
+In the Amazon Developer Console, use the files from the speechAssets folder and make a custom slot named CHATTER and fill the slots with the values from CHATTER_Slot_Values.txt.
 
 For the todo list, calendar, stocks and more you will need to host the startup.csv file somewhere. Personally, I saved the csv file to DropBox, which can easily be edited with a text editor. (Note when you get the link from DropBox change ?dl=0 to ?raw=1)  Currently, Chatter is using the startup.csv file from https://raw.githubusercontent.com/ekt1701/Alexa-Chatter/master/data/startup.csv
 
