@@ -1,16 +1,32 @@
-hello
 good morning
 tell me a joke
-how are you
-what is your name
-a long long time ago
-in a galaxy far far away
-ghost in a shell
-when will the sun rise
-can you see the forest from the trees
-tell me a random quote
+reuters
+cnn
+wall street journal
+new york times
+cnet
+search wikipedia
+search duck duck go
+search wolf ram alpha
+search bing news
+reddit news
+hacker news
+synonym for
+get answer
+air quality
+people in space
+space launch
+random quote
 what is my weather
-what is on my to do list
+to do
 make me think
 play game
-tell me a story
+what is word of day
+gold
+blue
+green
+pink
+black
+yellow
+gray
+imponderables
